@@ -98,6 +98,39 @@ public class PersonApiController {
     /*
     POST Aa record by Requesting Parameters from URI
      */
+
+     @PostMapping("/updatePerson/{id}")
+    public String updatePerson(@PathVariable Long id, @RequestBody Person person) {
+    // Retrieve the existing person from the database
+    Optional<Person> optionalPerson = repository.findById(id);
+            
+    // Check if the person with the given id exists
+    if (optionalPerson.isPresent()) {
+        // Update the person's name and email based on the form inputs
+        Person oldPerson = optionalPerson.get();
+
+        String name = person.getName();
+        String email = person.getEmail();
+        if (name!= null) {
+            oldPerson.setName(name);
+        }   
+        if(email!= null) {     
+        oldPerson.setEmail(email);
+    }
+        // Save the updated person to the database
+        repository.save(oldPerson);
+
+        // Redirect to the reading page after updating
+        return "redirect:/reading";
+    } else {
+        // If the person is not found, redirect to the reading page
+        return "redirect:/reading";
+    }   
+}
+
+
+
+    
     @PostMapping("/post")
     public ResponseEntity<Object> postPerson(@RequestParam("email") String email,
                                              @RequestParam("password") String password,
