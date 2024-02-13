@@ -100,22 +100,25 @@ public class PersonApiController {
      */
 
      @PostMapping("/updatePerson/{id}")
-    public String updatePerson(@PathVariable Long id, @RequestParam String name, @RequestParam String email) {
+    public String updatePerson(@PathVariable Long id, @RequestBody Person person) {
     // Retrieve the existing person from the database
     Optional<Person> optionalPerson = repository.findById(id);
-
+            
     // Check if the person with the given id exists
     if (optionalPerson.isPresent()) {
         // Update the person's name and email based on the form inputs
-        Person person = optionalPerson.get();
+        Person oldPerson = optionalPerson.get();
+
+        String name = person.getName();
+        String email = person.getEmail();
         if (name!= null) {
-            person.setName(name);
+            oldPerson.setName(name);
         }   
         if(email!= null) {     
-        person.setEmail(email);
+        oldPerson.setEmail(email);
     }
         // Save the updated person to the database
-        repository.save(person);
+        repository.save(oldPerson);
 
         // Redirect to the reading page after updating
         return "redirect:/reading";
