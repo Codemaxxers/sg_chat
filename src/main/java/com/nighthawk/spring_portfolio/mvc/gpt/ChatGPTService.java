@@ -57,7 +57,7 @@ public class ChatGPTService {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, Object> requestBodyMap = new HashMap<>();
-        requestBodyMap.put("model", "gpt-3.5-turbo");
+        requestBodyMap.put("model", "gpt-4");
         requestBodyMap.put("messages", messages);
         requestBodyMap.put("max_tokens", 150);
 
