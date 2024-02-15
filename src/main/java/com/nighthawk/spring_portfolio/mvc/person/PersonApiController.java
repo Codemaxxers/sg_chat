@@ -100,33 +100,30 @@ public class PersonApiController {
      */
 
      @PostMapping("/updatePerson/{id}")
-    public String updatePerson(@PathVariable Long id, @RequestBody Person person) {
-    // Retrieve the existing person from the database
-    Optional<Person> optionalPerson = repository.findById(id);
-            
-    // Check if the person with the given id exists
-    if (optionalPerson.isPresent()) {
-        // Update the person's name and email based on the form inputs
-        Person oldPerson = optionalPerson.get();
-
-        String name = person.getName();
-        String email = person.getEmail();
-        if (name!= null) {
-            oldPerson.setName(name);
-        }   
-        if(email!= null) {     
-        oldPerson.setEmail(email);
-    }
-        // Save the updated person to the database
-        repository.save(oldPerson);
-
-        // Redirect to the reading page after updating
-        return "redirect:/reading";
-    } else {
-        // If the person is not found, redirect to the reading page
-        return "redirect:/reading";
-    }   
-}
+     public ResponseEntity<Person> updatePerson(@PathVariable Long id, @RequestBody Person updatedPerson) {
+         // Retrieve the existing person from the database
+         Optional<Person> optionalPerson = repository.findById(id);
+         
+         // Check if the person with the given id exists
+         if (optionalPerson.isPresent()) {
+             // Update the existing person with the new data
+             Person existingPerson = optionalPerson.get();
+             existingPerson.setName(updatedPerson.getName());
+             System.out.println(updatedPerson.getEmail());
+             //existingPerson.setEmail(updatedPerson.getEmail()); this does not fuckig
+             
+             // Save the updated person to the database
+             repository.save(existingPerson);
+             
+             return new ResponseEntity<>(existingPerson, HttpStatus.OK); 
+         } else {
+             // If the person with the given id does not exist, return 404 Not Found
+             return new ResponseEntity<>(HttpStatus.NOT_FOUND); 
+         }   
+     }
+     
+     
+     
 
 
 

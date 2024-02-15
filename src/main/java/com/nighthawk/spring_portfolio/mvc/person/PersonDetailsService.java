@@ -37,6 +37,7 @@ public class PersonDetailsService implements UserDetailsService {  // "implement
         Person person = personJpaRepository.findByEmail(email); // setting variable user equal to the method finding the username in the database
         if(person==null) {
 			throw new UsernameNotFoundException("User not found with username: " + email);
+            
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         person.getRoles().forEach(role -> { //loop through roles
@@ -45,6 +46,7 @@ public class PersonDetailsService implements UserDetailsService {  // "implement
         // train spring security to User and Authorities
         return new org.springframework.security.core.userdetails.User(person.getEmail(), person.getPassword(), authorities);
     }
+
 
     /* Person Section */
 
