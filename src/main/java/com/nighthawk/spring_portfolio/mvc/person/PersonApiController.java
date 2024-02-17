@@ -121,7 +121,10 @@ public class PersonApiController {
         int profilePicInt = 0;
         int accountPoints = 0;
         int accountLevel = 1;
-        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel);
+        // base health, gear health, base attack, gear attack
+        int[][] statsArray = {{100, 0}, {100, 0}};
+        ;
+        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray);
         personDetailsService.save(person);
     
         return new ResponseEntity<>(email + " is created successfully", HttpStatus.CREATED);

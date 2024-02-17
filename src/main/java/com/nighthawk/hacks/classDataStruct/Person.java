@@ -19,6 +19,7 @@ public class Person extends Generics{
     private int profilePicInt;
     private int accountPoints;
     private int accountLevel;
+    private int[][] statsArray;
     
 
     // Constructor with zero arguments
@@ -27,7 +28,7 @@ public class Person extends Generics{
     }
 
     // Constructor used when building object from an API
-    public Person(String uid, String password, String name, int csaPoints, int cspPoints, int profilePicInt, int accountPoints, int accountLevel) {
+    public Person(String uid, String password, String name, int csaPoints, int cspPoints, int profilePicInt, int accountPoints, int accountLevel, int[][] statsArray) {
         this();  // runs zero argument constructor
         this.uid = uid;
         this.password = password;
@@ -35,8 +36,9 @@ public class Person extends Generics{
         this.csaPoints = csaPoints;
         this.cspPoints = cspPoints;
         this.profilePicInt = profilePicInt;
-        this.accountPoints = getAccountPoints();
-        this.accountLevel = getAccountLevel();
+        this.accountPoints = accountPoints;
+        this.accountLevel = accountLevel;
+        this.statsArray = statsArray;
     }
 
     /* 'Generics' requires getKey to help enforce KeyTypes usage */
@@ -62,8 +64,9 @@ public class Person extends Generics{
             output += ", csaPoints=" + this.csaPoints;
             output += ", cspPoints=" + this.cspPoints;
             output += ", profilePicInt=" + this.profilePicInt;
-            output += ", accountPoints=" + getAccountPoints();
-            output += ", accountLevel=" + getAccountLevel();
+            output += ", accountPoints=" + accountPoints;
+            output += ", accountLevel=" + accountLevel;
+            output += ", statsArray=" + this.statsArray;
 
         }
         return output;
@@ -122,6 +125,14 @@ public class Person extends Generics{
 
     public int getAccountLevel() {
         return accountLevel;
+    }
+
+    public int[][] getStatsArray() {
+        return statsArray;
+    }
+
+    public void setStatsArray(int[][] statsArray) {
+        this.statsArray = statsArray;
     }
     
 }
