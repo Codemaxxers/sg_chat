@@ -69,7 +69,7 @@ public class SecurityConfig {
 				// list the requests/endpoints need to be authenticated
 				.authorizeHttpRequests(auth -> auth
 					.requestMatchers("/authenticate", "/signout").permitAll()
-					.requestMatchers("/reading").hasAnyAuthority("ROLE_ADMIN")
+					.requestMatchers("/reading/**").hasAnyAuthority("ROLE_ADMIN")
 					.requestMatchers("/mvc/person/update/**", "/mvc/person/delete/**").hasAnyAuthority("ROLE_ADMIN")
 					.requestMatchers("/api/person/delete/**").hasAnyAuthority("ROLE_ADMIN")
 					.requestMatchers("/**").permitAll()

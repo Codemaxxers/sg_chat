@@ -6,6 +6,22 @@
 
 <head>    <!-- Page specific head additions -->
     <title>Person List</title>
+    <style>
+        /* Add custom CSS styles here */
+  
+
+        .bg-primary {
+            background-color: #007bff !important;
+        }
+
+        .text-light {
+            color: #f8f9fa !important;
+        }
+
+        .bg-success {
+            background-color: #28a745 !important;
+        }
+    </style>
 </head>
 
 <!-- <body> -->
@@ -22,26 +38,45 @@
         <div class="container py-4 text-light bg-success">
 
             <h2>Person Viewer + console (cannot delete admins)</h2>
-            <a th:href="@{/creating}">Create Person</a>
-            <a th:href="@{/updating}">Update Person</a>
-            <a th:href="@{/deleting}">Delete Person</a>
             <div class="row align-items-md-stretch">
+            
+
+            
                 <table class="table">
                     <thead>
-                    <tr>
+                    <tr class="bg-primary text-light">
                         <th>ID</th>
                         <th>Email</th>
                         <th>Person</th>
+                        <th>Roles</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="person : ${persons}">
                         <td th:text="${person.id}">Person ID</td>
-                        <td th:text="${person.email}">Birth Email</td>
+                        <td th:text="${person.email}">Email</td>
                         <td th:text="${person.name}">Name</td>
+                        <td><span th:text="${person.roles}">Roles</span></td>
+                        <td>                
+                            <form action="#" th:action = "@{/reading/updateName/{id}(id=${person.id})}" th:object="${person}" method="POST">
+                            <label for="name">Name:</label>
+                            <input type="text" id="name" name="name">
+                                
+                            <button type="submit">Update Name</button>
+                        </form>
+                        <form action="#" th:action = "@{/reading/updateEmail/{id}(id=${person.id})}" th:object="${person}" method="POST">
+           
+                            <label for="email">Email:</label>
+                            <input type="Email" id="email" name="email">
+                                
+                            <button type="submit">Update Email</button>
+                        </form>
+                        
+
+                    
+                    </td>
                         <td>
-                            <a th:href="@{/delete/{id}(id=${person.id})}">Delete</a>
-                            <a th:href="@{/update/{id}(id=${person.id})}">updating</a>
+                            <a th:href="@{/reading/delete/{id}(id=${person.id})}" class="text-danger">Delete</a>
                             <!--- <a th:href="@{/mvc/notes/{id}(id = ${person.id})}">Notes</a> -->
                         </td>
                     </tr>
@@ -54,6 +89,4 @@
 
 </th:block>
 </body>
-
-
 </html>

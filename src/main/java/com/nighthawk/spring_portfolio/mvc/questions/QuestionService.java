@@ -21,6 +21,9 @@ public class QuestionService {
     public List<Question> getQuestionsByCourse(String courseName) {
         return customQuestionRepository.findByCourse(courseName);
     }
+    public Question getRandomQuestion(String courseName) {
+        return customQuestionRepository.findRandomQuestion(courseName);
+    }
 
 
     // Other business logic methods
