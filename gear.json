@@ -1,0 +1,25 @@
+{
+    "items": [
+      {
+        "name": "Basic Armor",
+        "gearID": 1000,
+        "healthAdded": 100,
+        "damageAdded": 0,
+        "iconUrls": ""
+      },
+      {
+        "name": "Basic Sword",
+        "gearID": 2000,
+        "healthAdded": 0,
+        "damageAdded": 100,
+        "iconUrls": ""
+      },
+      {
+        "name": "Basic Charm",
+        "gearID": 3000,
+        "healthAdded": 50,
+        "damageAdded": 50,
+        "iconUrls": ""
+      }
+    ]
+}

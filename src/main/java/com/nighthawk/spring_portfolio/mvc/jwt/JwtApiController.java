@@ -17,9 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nighthawk.spring_portfolio.mvc.person.Person;
 import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.annotation.security.PermitAll;
 
 @RestController
 @CrossOrigin
@@ -52,21 +50,20 @@ public class JwtApiController {
 	}
 
 	@PostMapping("/signout")
-    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("jwt")) {
-                    cookie.setValue("");
-                    cookie.setPath("/");
-                    cookie.setMaxAge(0);
-                    response.addCookie(cookie);
-                    break;
-                }
-            }
-        }
-        return ResponseEntity.ok().build();
-    }
+	@PermitAll
+	public ResponseEntity<?> createCookie(Person authenticationRequest) {
+		// No authentication required
+		final ResponseCookie tokenCookie = ResponseCookie.from("jwt")
+				.httpOnly(true)
+				.secure(true)
+				.path("/")
+				.maxAge(0)
+				.sameSite("None; Secure")
+				// .domain("example.com") // Set to backend domain
+				.build();
+		return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, tokenCookie.toString()).build();
+	}
+
 
 	private void authenticate(String username, String password) throws Exception {
 		try {
