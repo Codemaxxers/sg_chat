@@ -5,6 +5,7 @@ import static jakarta.persistence.FetchType.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -71,6 +72,10 @@ public class Person {
     private int accountPoints;
     private int accountLevel;
     private int[][] statsArray;
+    private List<Integer> inventory;
+    private int weaponGearIdEquipped;
+    private int armorGearIdEquipped;
+    private int accessoryGearIdEquipped;
     /* HashMap is used to store JSON for daily "stats"
     "stats": {
         "2022-11-13": {
@@ -85,7 +90,7 @@ public class Person {
     
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, int csaPoints, int cspPoints, int profilePicInt, int accountPoints, int accountLevel, int[][] statsArray) {
+    public Person(String email, String password, String name, int csaPoints, int cspPoints, int profilePicInt, int accountPoints, int accountLevel, int[][] statsArray, List<Integer> inventory, int weaponGearIdEquipped, int armorGearIdEquipped, int accessoryGearIdEquipped) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -95,12 +100,18 @@ public class Person {
         this.accountPoints = accountPoints;
         this.accountLevel = accountLevel;
         this.statsArray = statsArray;
+        this.inventory = inventory;
+        this.weaponGearIdEquipped = weaponGearIdEquipped;
+        this.armorGearIdEquipped = armorGearIdEquipped;
+        this.accessoryGearIdEquipped = accessoryGearIdEquipped;
+        
     }
 
     
     // Initialize static test data
     public static Person[] init() {
         int[][] baseStatsArray = {{100, 0}, {100, 0}};
+        ArrayList<Integer> baseInventory = new ArrayList<>();
 
         // basics of class construction
         Person p1 = new Person();
@@ -112,6 +123,8 @@ public class Person {
         p1.setProfilePicInt(0);
         p1.setAccountLevel(1);
         p1.setStatsArray(baseStatsArray);
+        p1.setInventory(baseInventory);
+        
 
         Person p2 = new Person();
         p2.setName("Justin Nguyen");
@@ -122,6 +135,7 @@ public class Person {
         p2.setProfilePicInt(0);
         p2.setAccountLevel(1);
         p2.setStatsArray(baseStatsArray);
+        p2.setInventory(baseInventory);
 
         Person p3 = new Person();
         p3.setName("Finn Carpenter");
@@ -132,6 +146,7 @@ public class Person {
         p3.setProfilePicInt(0);
         p3.setAccountLevel(1);
         p3.setStatsArray(baseStatsArray);
+        p3.setInventory(baseInventory);
 
         Person p4 = new Person();
         p4.setName("Rachit Jaiswal");
@@ -142,6 +157,7 @@ public class Person {
         p4.setProfilePicInt(0);
         p4.setAccountLevel(1);
         p4.setStatsArray(baseStatsArray);
+        p4.setInventory(baseInventory);
 
         Person p5 = new Person();
         p5.setName("Luna Iwazaki");
@@ -152,6 +168,7 @@ public class Person {
         p5.setProfilePicInt(0);
         p5.setAccountLevel(1);
         p5.setStatsArray(baseStatsArray);
+        p5.setInventory(baseInventory);
 
         Person p6 = new Person();
         p6.setName("Tanisha Patil");
@@ -162,6 +179,7 @@ public class Person {
         p6.setProfilePicInt(0);
         p6.setAccountLevel(1);
         p6.setStatsArray(baseStatsArray);
+        p6.setInventory(baseInventory);
 
         Person p7 = new Person();
         p7.setName("TestPlayer");
@@ -172,6 +190,7 @@ public class Person {
         p7.setProfilePicInt(0);
         p7.setAccountLevel(1);
         p7.setStatsArray(baseStatsArray);
+        p7.setInventory(baseInventory);
 
         // Array definition and data initialization
         Person persons[] = {p1, p2, p3, p4, p5, p6, p7};
