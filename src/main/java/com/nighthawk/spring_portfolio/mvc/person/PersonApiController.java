@@ -1,9 +1,13 @@
 package com.nighthawk.spring_portfolio.mvc.person;
+import java.io.FileReader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -121,14 +125,34 @@ public class PersonApiController {
         int profilePicInt = 0;
         int accountPoints = 0;
         int accountLevel = 1;
+        int weaponGearIdEquipped = 0;
+        int armorGearIdEquipped = 0;
+        int accessoryGearIdEquipped = 0;
+        List<Integer> inventory = null;
         // base health, gear health, base attack, gear attack
         int[][] statsArray = {{100, 0}, {100, 0}};
-        ;
-        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray);
+        
+        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray, inventory, weaponGearIdEquipped, armorGearIdEquipped, accessoryGearIdEquipped);
         personDetailsService.save(person);
     
         return new ResponseEntity<>(email + " is created successfully", HttpStatus.CREATED);
     }
+
+    @PostMapping("appendInventory")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> appendInventory(@RequestParam("gearID") int gearID) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        List<Integer> inventory = person.getInventory();
+        if (inventory.contains(gearID)) {
+            return new ResponseEntity<>("Gear with ID of " + gearID + " is already in this account's inventory", HttpStatus.BAD_REQUEST);
+        }
+        inventory.add(gearID);
+        person.setInventory(inventory);
+        repository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+    
 
     /*
     The personSearch API looks across database for partial match to term (k,v) passed by RequestEntity body
@@ -252,4 +276,153 @@ public class PersonApiController {
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
+
+    @PostMapping("/unequipArmor")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> unequipArmor(@RequestParam("armorID") int armorID) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        int[][] statsArray = person.getStatsArray();
+
+        int gearHealthAdded = 0;
+        int gearDamageAdded = 0;
+  
+        int currentArmor = person.getArmorGearIdEquipped();
+
+        if ( currentArmor == 0) {
+            return new ResponseEntity<>("No armor equipped", HttpStatus.BAD_REQUEST);
+        }
+
+        if ( armorID < 1000 || armorID > 2000) {
+            return new ResponseEntity<>("ID does not match an armor item id range of 1000 to 1999", HttpStatus.BAD_REQUEST);
+        }
+        
+        if (currentArmor != armorID) {
+            return new ResponseEntity<>("Armor equipped does match id of " + armorID + " which is being requested", HttpStatus.BAD_REQUEST);
+        }
+
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("gear.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+
+            for (int i = 0; i < gearArray.size(); i++) {
+                JSONObject gear = (JSONObject) gearArray.get(i);
+                // Use the correct field name for gearID/id
+                if (armorID == (int) (long) gear.get("gearID") || armorID == (int) (long) gear.get("id")) {
+                    gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
+                    gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        statsArray[0][1] -= gearHealthAdded;
+        statsArray[1][1] -= gearDamageAdded;
+
+        person.setStatsArray(statsArray);
+        person.setArmorGearIdEquipped(0);
+        repository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @PostMapping("/equipArmor")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> equipArmor(@RequestParam("armorID") int armorID) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        int[][] statsArray = person.getStatsArray();
+
+        int gearHealthAdded = 0;
+        int gearDamageAdded = 0;
+  
+        int currentArmor = person.getArmorGearIdEquipped();
+
+        List<Integer> inventory = person.getInventory();
+        if (!inventory.contains(armorID)) {
+            return new ResponseEntity<>("Gear with ID of " + armorID + " is not in this account's inventory", HttpStatus.BAD_REQUEST);
+        }
+
+        if (currentArmor >= 1000 && currentArmor < 2000) {
+            return new ResponseEntity<>("Armor is already equipped", HttpStatus.BAD_REQUEST);
+        }
+
+        if ( armorID < 999 || armorID > 1999) {
+            return new ResponseEntity<>("ID does not match an armor item id range of 1000 to 1999", HttpStatus.BAD_REQUEST);
+        }
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("gear.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+
+            for (int i = 0; i < gearArray.size(); i++) {
+                JSONObject gear = (JSONObject) gearArray.get(i);
+                // Use the correct field name for gearID/id
+                if (armorID == (int) (long) gear.get("gearID") || armorID == (int) (long) gear.get("id")) {
+                    gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
+                    gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        statsArray[0][1] += gearHealthAdded;
+        statsArray[1][1] += gearDamageAdded;
+
+        person.setStatsArray(statsArray);
+        person.setArmorGearIdEquipped(armorID);
+        repository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    // @PostMapping("/changeGear")
+    // @PreAuthorize("isAuthenticated()")
+    // public ResponseEntity<Person> changeGear(@RequestParam("equip") boolean equip,
+    //                                          @RequestParam("gearID") int gearID){
+    //     String username = SecurityContextHolder.getContext().getAuthentication().getName();
+    //     Person person = repository.findByEmail(username);
+    //     int[][] statsArray = person.getStatsArray();
+
+    //     int gearHealthAdded = 0;
+    //     int gearDamageAdded = 0;
+
+    //     JSONParser parser = new JSONParser();
+    //     try {
+    //         Object obj = parser.parse(new FileReader("gear.json"));
+    //         JSONObject jsonObject = (JSONObject)obj;
+    //         JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+
+    //         for (int i = 0; i < gearArray.size(); i++) {
+    //             JSONObject gear = (JSONObject) gearArray.get(i);
+    //             // Use the correct field name for gearID/id
+    //             if (gearID == (int) (long) gear.get("gearID") || gearID == (int) (long) gear.get("id")) {
+    //                 gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
+    //                 gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
+    //                 break;
+    //             }
+    //         }
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
+    //     if (equip) {
+    //         statsArray[0][1] += gearHealthAdded;
+    //         statsArray[1][1] += gearDamageAdded;
+    //     } else {
+    //         statsArray[0][1] -= gearHealthAdded;
+    //         statsArray[1][1] -= gearDamageAdded;
+    //     }
+
+    //     person.setStatsArray(statsArray);
+    //     repository.save(person);
+    //     return new ResponseEntity<>(person, HttpStatus.OK);
+    // }
+
 }
