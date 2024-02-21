@@ -58,6 +58,22 @@ public class PersonApiController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+    @GetMapping("/characterData")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Map<String, Object>> characterData() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+
+        // Create a map to hold the desired properties
+        Map<String, Object> response = new HashMap<>();
+        response.put("name", person.getName());
+        response.put("inventory", person.getInventory());
+        response.put("statsArray", person.getStatsArray());
+        // Add more properties as needed
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     /*
     GET individual Person using ID
      */
@@ -231,6 +247,8 @@ public class PersonApiController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
     }
     
+
+    
     
 
     @PostMapping("/addPointsCSA")
@@ -242,10 +260,9 @@ public class PersonApiController {
         int accountPointsToBeSet = person.getAccountPoints() + points;
         person.setAccountPoints(accountPointsToBeSet);
 
+        // START OF ACCOUNT LEVEL CALCULATION
         int[] levels = {0, 100, 221, 354, 500, 661, 839, 1034, 1248, 1485, 1746, 2031, 2345, 2690, 3069, 3483, 3937, 4438, 4994, 5615, 6301, 7064, 7910, 8857, 9914, 11098, 12389, 13800, 15343, 17029};
-
         int newLevel = 0; // Default level
-
         for (int i = 0; i < levels.length; i++) {
             if (accountPointsToBeSet >= levels[i]) {
                 newLevel = i + 1; // Increment level if points meet or exceed the level threshold
@@ -253,17 +270,30 @@ public class PersonApiController {
                 break; // Break the loop once the current level is determined
             }
         }
-        
         // If points exceed all levels, set the highest level
         if (accountPointsToBeSet > levels[levels.length - 1]) {
             newLevel = levels.length;
         }
-
         person.setAccountLevel(newLevel);
+        // END OF ACCOUNT LEVEL CALCULATION
+
+
+
+        // START OF LEVEL STATS CALCULATION
+        int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};
+        int accountLevelMatchingStats = newLevel - 1;
+        int[][] statsArray = person.getStatsArray();
+        statsArray[0][0] = baseStats[accountLevelMatchingStats];
+        statsArray[1][0] = baseStats[accountLevelMatchingStats];
+        person.setStatsArray(statsArray);
+        // END OF LEVEL STATS CALCULATION
 
         repository.save(person);  // Save the updated Person object
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
+
+
+
 
     @PostMapping("/addPointsCSP")
     @PreAuthorize("isAuthenticated()")
@@ -274,10 +304,10 @@ public class PersonApiController {
         int accountPointsToBeSet = person.getAccountPoints() + points;
         person.setAccountPoints(accountPointsToBeSet);
 
+
+        // START OF ACCOUNT LEVEL CALCULATION
         int[] levels = {0, 100, 221, 354, 500, 661, 839, 1034, 1248, 1485, 1746, 2031, 2345, 2690, 3069, 3483, 3937, 4438, 4994, 5615, 6301, 7064, 7910, 8857, 9914, 11098, 12389, 13800, 15343, 17029};
-
         int newLevel = 0; // Default level
-
         for (int i = 0; i < levels.length; i++) {
             if (accountPointsToBeSet >= levels[i]) {
                 newLevel = i + 1; // Increment level if points meet or exceed the level threshold
@@ -285,17 +315,29 @@ public class PersonApiController {
                 break; // Break the loop once the current level is determined
             }
         }
-        
         // If points exceed all levels, set the highest level
         if (accountPointsToBeSet > levels[levels.length - 1]) {
             newLevel = levels.length;
         }
-
         person.setAccountLevel(newLevel);
+        // END OF ACCOUNT LEVEL CALCULATION
 
+
+
+        // START OF LEVEL STATS CALCULATION
+        int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};
+        int accountLevelMatchingStats = newLevel - 1;
+        int[][] statsArray = person.getStatsArray();
+        statsArray[0][0] = baseStats[accountLevelMatchingStats];
+        statsArray[1][0] = baseStats[accountLevelMatchingStats];
+        person.setStatsArray(statsArray);
+        // END OF LEVEL STATS CALCULATION
+        
+        
         repository.save(person);  // Save the updated Person object
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
+
 
     @PostMapping("/changeProfilePic")
     @PreAuthorize("isAuthenticated()")
@@ -306,6 +348,7 @@ public class PersonApiController {
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
+
 
     @PostMapping("/unequipArmor")
     @PreAuthorize("isAuthenticated()")
