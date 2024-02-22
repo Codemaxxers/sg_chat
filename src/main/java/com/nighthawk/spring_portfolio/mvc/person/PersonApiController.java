@@ -69,6 +69,11 @@ public class PersonApiController {
         response.put("name", person.getName());
         response.put("inventory", person.getInventory());
         response.put("statsArray", person.getStatsArray());
+        response.put("accountLevel", person.getAccountLevel());
+        response.put("accountPoints", person.getAccountPoints());
+        response.put("weaponGearIdEquipped", person.getWeaponGearIdEquipped());
+        response.put("armorGearIdEquipped", person.getArmorGearIdEquipped());
+        response.put("accessoryGearIdEquipped", person.getAccessoryGearIdEquipped());
         // Add more properties as needed
 
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -248,7 +253,7 @@ public class PersonApiController {
     }
     
 
-    
+
     
 
     @PostMapping("/addPointsCSA")
@@ -383,11 +388,18 @@ public class PersonApiController {
 
             for (int i = 0; i < gearArray.size(); i++) {
                 JSONObject gear = (JSONObject) gearArray.get(i);
-                // Use the correct field name for gearID/id
-                if (armorID == (int) (long) gear.get("gearID") || armorID == (int) (long) gear.get("id")) {
-                    gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
-                    gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
-                    break;
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && armorID == gearID.intValue()) || (id != null && armorID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -436,11 +448,18 @@ public class PersonApiController {
 
             for (int i = 0; i < gearArray.size(); i++) {
                 JSONObject gear = (JSONObject) gearArray.get(i);
-                // Use the correct field name for gearID/id
-                if (armorID == (int) (long) gear.get("gearID") || armorID == (int) (long) gear.get("id")) {
-                    gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
-                    gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
-                    break;
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && armorID == gearID.intValue()) || (id != null && armorID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {
