@@ -357,10 +357,11 @@ public class PersonApiController {
 
     @PostMapping("/unequipArmor")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> unequipArmor(@RequestParam("armorID") int armorID) {
+    public ResponseEntity<Object> unequipArmor() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = repository.findByEmail(username);
         int[][] statsArray = person.getStatsArray();
+        int armorID = person.getArmorGearIdEquipped();
 
         int gearHealthAdded = 0;
         int gearDamageAdded = 0;
@@ -415,6 +416,47 @@ public class PersonApiController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+    private void unequipArmorMethod(Person person) {
+        int[][] statsArray = person.getStatsArray();
+        int armorID = person.getArmorGearIdEquipped();
+
+        int gearHealthAdded = 0;
+        int gearDamageAdded = 0;
+  
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("gear.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+
+            for (int i = 0; i < gearArray.size(); i++) {
+                JSONObject gear = (JSONObject) gearArray.get(i);
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && armorID == gearID.intValue()) || (id != null && armorID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        statsArray[0][1] -= gearHealthAdded;
+        statsArray[1][1] -= gearDamageAdded;
+
+        person.setStatsArray(statsArray);
+        person.setArmorGearIdEquipped(0);
+        repository.save(person);
+    }
+
     @PostMapping("/equipArmor")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Object> equipArmor(@RequestParam("armorID") int armorID) {
@@ -433,8 +475,9 @@ public class PersonApiController {
         }
 
         if (currentArmor >= 1000 && currentArmor < 2000) {
-            return new ResponseEntity<>("Armor is already equipped", HttpStatus.BAD_REQUEST);
+            unequipArmorMethod(person);
         }
+        
 
         if ( armorID < 999 || armorID > 1999) {
             return new ResponseEntity<>("ID does not match an armor item id range of 1000 to 1999", HttpStatus.BAD_REQUEST);
