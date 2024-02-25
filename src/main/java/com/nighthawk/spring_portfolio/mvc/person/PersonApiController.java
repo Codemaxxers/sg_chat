@@ -1,5 +1,6 @@
 package com.nighthawk.spring_portfolio.mvc.person;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+
 
 
 @RestController
@@ -179,11 +182,14 @@ public class PersonApiController {
         int weaponGearIdEquipped = 0;
         int armorGearIdEquipped = 0;
         int accessoryGearIdEquipped = 0;
-        List<Integer> inventory = null;
+        ArrayList<Integer> inventory = new ArrayList<>();
         // base health, gear health, base attack, gear attack
         int[][] statsArray = {{100, 0}, {100, 0}};
+        int power = 200;
+        int totalHealth = 100;
+        int totalDamage = 100;
         
-        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray, inventory, weaponGearIdEquipped, armorGearIdEquipped, accessoryGearIdEquipped);
+        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray, inventory, weaponGearIdEquipped, armorGearIdEquipped, accessoryGearIdEquipped, power, totalHealth, totalDamage);
         personDetailsService.save(person);
     
         return new ResponseEntity<>(email + " is created successfully", HttpStatus.CREATED);
@@ -410,12 +416,22 @@ public class PersonApiController {
         statsArray[0][1] -= gearHealthAdded;
         statsArray[1][1] -= gearDamageAdded;
 
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
         person.setStatsArray(statsArray);
         person.setArmorGearIdEquipped(0);
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+    // for equipping another armor if one is already equipped
     private void unequipArmorMethod(Person person) {
         int[][] statsArray = person.getStatsArray();
         int armorID = person.getArmorGearIdEquipped();
@@ -451,6 +467,15 @@ public class PersonApiController {
 
         statsArray[0][1] -= gearHealthAdded;
         statsArray[1][1] -= gearDamageAdded;
+
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
 
         person.setStatsArray(statsArray);
         person.setArmorGearIdEquipped(0);
@@ -512,11 +537,52 @@ public class PersonApiController {
         statsArray[0][1] += gearHealthAdded;
         statsArray[1][1] += gearDamageAdded;
 
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
         person.setStatsArray(statsArray);
         person.setArmorGearIdEquipped(armorID);
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
+
+    // adds everything in statsArray to calculate "power"
+    public static int arraySum(int[][] statsArray) {
+        int sum = 0;    // sum initializer
+    
+        // Nested loops to iterate over each element of the 2D array
+        for (int[] row : statsArray) {
+            for (int num : row) {
+                sum += num;
+                System.out.print(num + "\t");  // debug
+            }
+        }
+    
+        return sum;
+    }
+
+    public static int calculateTotalHealth(int[][] statsArray) {
+        int totalHealth = 0;
+        for (int i = 0; i < statsArray.length; i++) {
+            totalHealth += statsArray[0][i];
+        }
+        return totalHealth;
+    }
+
+    public static int calculateTotalDamage(int[][] statsArray) {
+        int totalDamage = 0;
+        for (int i = 0; i < statsArray.length; i++) {
+            totalDamage += statsArray[1][i];
+        }
+        return totalDamage;
+    }
+    
 
     // @PostMapping("/changeGear")
     // @PreAuthorize("isAuthenticated()")
