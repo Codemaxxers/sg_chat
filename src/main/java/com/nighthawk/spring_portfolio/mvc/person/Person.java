@@ -76,6 +76,9 @@ public class Person {
     private int weaponGearIdEquipped;
     private int armorGearIdEquipped;
     private int accessoryGearIdEquipped;
+    private int power;
+    private int totalHealth;
+    private int totalDamage;
     /* HashMap is used to store JSON for daily "stats"
     "stats": {
         "2022-11-13": {
@@ -90,7 +93,7 @@ public class Person {
     
 
     // Constructor used when building object from an API
-    public Person(String email, String password, String name, int csaPoints, int cspPoints, int profilePicInt, int accountPoints, int accountLevel, int[][] statsArray, List<Integer> inventory, int weaponGearIdEquipped, int armorGearIdEquipped, int accessoryGearIdEquipped) {
+    public Person(String email, String password, String name, int csaPoints, int cspPoints, int profilePicInt, int accountPoints, int accountLevel, int[][] statsArray, List<Integer> inventory, int weaponGearIdEquipped, int armorGearIdEquipped, int accessoryGearIdEquipped, int power, int totalHealth, int totalDamage) {
         this.email = email;
         this.password = password;
         this.name = name;
@@ -104,6 +107,9 @@ public class Person {
         this.weaponGearIdEquipped = weaponGearIdEquipped;
         this.armorGearIdEquipped = armorGearIdEquipped;
         this.accessoryGearIdEquipped = accessoryGearIdEquipped;
+        this.power = power;
+        this.totalDamage = totalDamage;
+        this.totalHealth = totalHealth;
         
     }
 
@@ -124,7 +130,10 @@ public class Person {
         p1.setAccountLevel(1);
         p1.setStatsArray(baseStatsArray);
         p1.setInventory(baseInventory);
-        
+        p1.setPower(200);
+        p1.setTotalHealth(100);
+        p1.setTotalDamage(100);
+
 
         Person p2 = new Person();
         p2.setName("Justin Nguyen");
@@ -136,6 +145,10 @@ public class Person {
         p2.setAccountLevel(1);
         p2.setStatsArray(baseStatsArray);
         p2.setInventory(baseInventory);
+        p2.setPower(200);
+        p2.setTotalHealth(100);
+        p2.setTotalDamage(100);
+
 
         Person p3 = new Person();
         p3.setName("Finn Carpenter");
@@ -147,6 +160,9 @@ public class Person {
         p3.setAccountLevel(1);
         p3.setStatsArray(baseStatsArray);
         p3.setInventory(baseInventory);
+        p3.setPower(200);
+        p3.setTotalHealth(100);
+        p3.setTotalDamage(100);
 
         Person p4 = new Person();
         p4.setName("Rachit Jaiswal");
@@ -158,6 +174,9 @@ public class Person {
         p4.setAccountLevel(1);
         p4.setStatsArray(baseStatsArray);
         p4.setInventory(baseInventory);
+        p4.setPower(200);
+        p4.setTotalHealth(100);
+        p4.setTotalDamage(100);
 
         Person p5 = new Person();
         p5.setName("Luna Iwazaki");
@@ -169,6 +188,9 @@ public class Person {
         p5.setAccountLevel(1);
         p5.setStatsArray(baseStatsArray);
         p5.setInventory(baseInventory);
+        p5.setPower(200);
+        p5.setTotalHealth(100);
+        p5.setTotalDamage(100);
 
         Person p6 = new Person();
         p6.setName("Tanisha Patil");
@@ -180,6 +202,9 @@ public class Person {
         p6.setAccountLevel(1);
         p6.setStatsArray(baseStatsArray);
         p6.setInventory(baseInventory);
+        p6.setPower(200);
+        p6.setTotalHealth(100);
+        p6.setTotalDamage(100);
 
         Person p7 = new Person();
         p7.setName("TestPlayer");
@@ -191,6 +216,9 @@ public class Person {
         p7.setAccountLevel(1);
         p7.setStatsArray(baseStatsArray);
         p7.setInventory(baseInventory);
+        p7.setPower(200);
+        p7.setTotalHealth(100);
+        p7.setTotalDamage(100);
 
         // Array definition and data initialization
         Person persons[] = {p1, p2, p3, p4, p5, p6, p7};

@@ -134,5 +134,17 @@ public class Person extends Generics{
     public void setStatsArray(int[][] statsArray) {
         this.statsArray = statsArray;
     }
+
+    public static int arraySum(int[] arr) {
+        int sum = 0;    // sum initializer
+
+        // enhanced for loop as values are needed, not index
+        for (int num : arr) {
+            sum += num;
+            System.out.print(num + "\t");  // debug
+        }
+
+        return sum;
+    }
     
 }

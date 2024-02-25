@@ -1,5 +1,6 @@
 package com.nighthawk.spring_portfolio.mvc.person;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+
 
 
 @RestController
@@ -56,6 +59,27 @@ public class PersonApiController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = repository.findByEmail(username);  // Retrieve data for the authenticated user
         return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @GetMapping("/characterData")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Map<String, Object>> characterData() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+
+        // Create a map to hold the desired properties
+        Map<String, Object> response = new HashMap<>();
+        response.put("name", person.getName());
+        response.put("inventory", person.getInventory());
+        response.put("statsArray", person.getStatsArray());
+        response.put("accountLevel", person.getAccountLevel());
+        response.put("accountPoints", person.getAccountPoints());
+        response.put("weaponGearIdEquipped", person.getWeaponGearIdEquipped());
+        response.put("armorGearIdEquipped", person.getArmorGearIdEquipped());
+        response.put("accessoryGearIdEquipped", person.getAccessoryGearIdEquipped());
+        // Add more properties as needed
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     /*
@@ -158,11 +182,14 @@ public class PersonApiController {
         int weaponGearIdEquipped = 0;
         int armorGearIdEquipped = 0;
         int accessoryGearIdEquipped = 0;
-        List<Integer> inventory = null;
+        ArrayList<Integer> inventory = new ArrayList<>();
         // base health, gear health, base attack, gear attack
         int[][] statsArray = {{100, 0}, {100, 0}};
+        int power = 200;
+        int totalHealth = 100;
+        int totalDamage = 100;
         
-        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray, inventory, weaponGearIdEquipped, armorGearIdEquipped, accessoryGearIdEquipped);
+        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray, inventory, weaponGearIdEquipped, armorGearIdEquipped, accessoryGearIdEquipped, power, totalHealth, totalDamage);
         personDetailsService.save(person);
     
         return new ResponseEntity<>(email + " is created successfully", HttpStatus.CREATED);
@@ -231,6 +258,8 @@ public class PersonApiController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST); 
     }
     
+
+
     
 
     @PostMapping("/addPointsCSA")
@@ -242,10 +271,9 @@ public class PersonApiController {
         int accountPointsToBeSet = person.getAccountPoints() + points;
         person.setAccountPoints(accountPointsToBeSet);
 
+        // START OF ACCOUNT LEVEL CALCULATION
         int[] levels = {0, 100, 221, 354, 500, 661, 839, 1034, 1248, 1485, 1746, 2031, 2345, 2690, 3069, 3483, 3937, 4438, 4994, 5615, 6301, 7064, 7910, 8857, 9914, 11098, 12389, 13800, 15343, 17029};
-
         int newLevel = 0; // Default level
-
         for (int i = 0; i < levels.length; i++) {
             if (accountPointsToBeSet >= levels[i]) {
                 newLevel = i + 1; // Increment level if points meet or exceed the level threshold
@@ -253,17 +281,30 @@ public class PersonApiController {
                 break; // Break the loop once the current level is determined
             }
         }
-        
         // If points exceed all levels, set the highest level
         if (accountPointsToBeSet > levels[levels.length - 1]) {
             newLevel = levels.length;
         }
-
         person.setAccountLevel(newLevel);
+        // END OF ACCOUNT LEVEL CALCULATION
+
+
+
+        // START OF LEVEL STATS CALCULATION
+        int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};
+        int accountLevelMatchingStats = newLevel - 1;
+        int[][] statsArray = person.getStatsArray();
+        statsArray[0][0] = baseStats[accountLevelMatchingStats];
+        statsArray[1][0] = baseStats[accountLevelMatchingStats];
+        person.setStatsArray(statsArray);
+        // END OF LEVEL STATS CALCULATION
 
         repository.save(person);  // Save the updated Person object
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
+
+
+
 
     @PostMapping("/addPointsCSP")
     @PreAuthorize("isAuthenticated()")
@@ -274,10 +315,10 @@ public class PersonApiController {
         int accountPointsToBeSet = person.getAccountPoints() + points;
         person.setAccountPoints(accountPointsToBeSet);
 
+
+        // START OF ACCOUNT LEVEL CALCULATION
         int[] levels = {0, 100, 221, 354, 500, 661, 839, 1034, 1248, 1485, 1746, 2031, 2345, 2690, 3069, 3483, 3937, 4438, 4994, 5615, 6301, 7064, 7910, 8857, 9914, 11098, 12389, 13800, 15343, 17029};
-
         int newLevel = 0; // Default level
-
         for (int i = 0; i < levels.length; i++) {
             if (accountPointsToBeSet >= levels[i]) {
                 newLevel = i + 1; // Increment level if points meet or exceed the level threshold
@@ -285,17 +326,29 @@ public class PersonApiController {
                 break; // Break the loop once the current level is determined
             }
         }
-        
         // If points exceed all levels, set the highest level
         if (accountPointsToBeSet > levels[levels.length - 1]) {
             newLevel = levels.length;
         }
-
         person.setAccountLevel(newLevel);
+        // END OF ACCOUNT LEVEL CALCULATION
 
+
+
+        // START OF LEVEL STATS CALCULATION
+        int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};
+        int accountLevelMatchingStats = newLevel - 1;
+        int[][] statsArray = person.getStatsArray();
+        statsArray[0][0] = baseStats[accountLevelMatchingStats];
+        statsArray[1][0] = baseStats[accountLevelMatchingStats];
+        person.setStatsArray(statsArray);
+        // END OF LEVEL STATS CALCULATION
+        
+        
         repository.save(person);  // Save the updated Person object
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
+
 
     @PostMapping("/changeProfilePic")
     @PreAuthorize("isAuthenticated()")
@@ -307,12 +360,14 @@ public class PersonApiController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+
     @PostMapping("/unequipArmor")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<Object> unequipArmor(@RequestParam("armorID") int armorID) {
+    public ResponseEntity<Object> unequipArmor() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = repository.findByEmail(username);
         int[][] statsArray = person.getStatsArray();
+        int armorID = person.getArmorGearIdEquipped();
 
         int gearHealthAdded = 0;
         int gearDamageAdded = 0;
@@ -340,11 +395,18 @@ public class PersonApiController {
 
             for (int i = 0; i < gearArray.size(); i++) {
                 JSONObject gear = (JSONObject) gearArray.get(i);
-                // Use the correct field name for gearID/id
-                if (armorID == (int) (long) gear.get("gearID") || armorID == (int) (long) gear.get("id")) {
-                    gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
-                    gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
-                    break;
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && armorID == gearID.intValue()) || (id != null && armorID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -354,10 +416,70 @@ public class PersonApiController {
         statsArray[0][1] -= gearHealthAdded;
         statsArray[1][1] -= gearDamageAdded;
 
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
         person.setStatsArray(statsArray);
         person.setArmorGearIdEquipped(0);
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    // for equipping another armor if one is already equipped
+    private void unequipArmorMethod(Person person) {
+        int[][] statsArray = person.getStatsArray();
+        int armorID = person.getArmorGearIdEquipped();
+
+        int gearHealthAdded = 0;
+        int gearDamageAdded = 0;
+  
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("gear.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+
+            for (int i = 0; i < gearArray.size(); i++) {
+                JSONObject gear = (JSONObject) gearArray.get(i);
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && armorID == gearID.intValue()) || (id != null && armorID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        statsArray[0][1] -= gearHealthAdded;
+        statsArray[1][1] -= gearDamageAdded;
+
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
+        person.setStatsArray(statsArray);
+        person.setArmorGearIdEquipped(0);
+        repository.save(person);
     }
 
     @PostMapping("/equipArmor")
@@ -378,8 +500,9 @@ public class PersonApiController {
         }
 
         if (currentArmor >= 1000 && currentArmor < 2000) {
-            return new ResponseEntity<>("Armor is already equipped", HttpStatus.BAD_REQUEST);
+            unequipArmorMethod(person);
         }
+        
 
         if ( armorID < 999 || armorID > 1999) {
             return new ResponseEntity<>("ID does not match an armor item id range of 1000 to 1999", HttpStatus.BAD_REQUEST);
@@ -393,11 +516,18 @@ public class PersonApiController {
 
             for (int i = 0; i < gearArray.size(); i++) {
                 JSONObject gear = (JSONObject) gearArray.get(i);
-                // Use the correct field name for gearID/id
-                if (armorID == (int) (long) gear.get("gearID") || armorID == (int) (long) gear.get("id")) {
-                    gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
-                    gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
-                    break;
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && armorID == gearID.intValue()) || (id != null && armorID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
                 }
             }
         } catch (Exception e) {
@@ -407,52 +537,52 @@ public class PersonApiController {
         statsArray[0][1] += gearHealthAdded;
         statsArray[1][1] += gearDamageAdded;
 
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
         person.setStatsArray(statsArray);
         person.setArmorGearIdEquipped(armorID);
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
-    // @PostMapping("/changeGear")
-    // @PreAuthorize("isAuthenticated()")
-    // public ResponseEntity<Person> changeGear(@RequestParam("equip") boolean equip,
-    //                                          @RequestParam("gearID") int gearID){
-    //     String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    //     Person person = repository.findByEmail(username);
-    //     int[][] statsArray = person.getStatsArray();
+    // adds everything in statsArray to calculate "power"
+    public static int arraySum(int[][] statsArray) {
+        int sum = 0;    // sum initializer
+    
+        // Nested loops to iterate over each element of the 2D array
+        for (int[] row : statsArray) {
+            for (int num : row) {
+                sum += num;
+                System.out.print(num + "\t");  // debug
+            }
+        }
+    
+        return sum;
+    }
 
-    //     int gearHealthAdded = 0;
-    //     int gearDamageAdded = 0;
+    public static int calculateTotalHealth(int[][] statsArray) {
+        int totalHealth = 0;
+        for (int i = 0; i < statsArray.length; i++) {
+            totalHealth += statsArray[0][i];
+        }
+        return totalHealth;
+    }
 
-    //     JSONParser parser = new JSONParser();
-    //     try {
-    //         Object obj = parser.parse(new FileReader("gear.json"));
-    //         JSONObject jsonObject = (JSONObject)obj;
-    //         JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+    public static int calculateTotalDamage(int[][] statsArray) {
+        int totalDamage = 0;
+        for (int i = 0; i < statsArray.length; i++) {
+            totalDamage += statsArray[1][i];
+        }
+        return totalDamage;
+    }
+    
 
-    //         for (int i = 0; i < gearArray.size(); i++) {
-    //             JSONObject gear = (JSONObject) gearArray.get(i);
-    //             // Use the correct field name for gearID/id
-    //             if (gearID == (int) (long) gear.get("gearID") || gearID == (int) (long) gear.get("id")) {
-    //                 gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
-    //                 gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
-    //                 break;
-    //             }
-    //         }
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    //     if (equip) {
-    //         statsArray[0][1] += gearHealthAdded;
-    //         statsArray[1][1] += gearDamageAdded;
-    //     } else {
-    //         statsArray[0][1] -= gearHealthAdded;
-    //         statsArray[1][1] -= gearDamageAdded;
-    //     }
-
-    //     person.setStatsArray(statsArray);
-    //     repository.save(person);
-    //     return new ResponseEntity<>(person, HttpStatus.OK);
-    // }
 
 }
