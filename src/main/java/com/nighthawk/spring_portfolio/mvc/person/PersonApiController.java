@@ -584,46 +584,5 @@ public class PersonApiController {
     }
     
 
-    // @PostMapping("/changeGear")
-    // @PreAuthorize("isAuthenticated()")
-    // public ResponseEntity<Person> changeGear(@RequestParam("equip") boolean equip,
-    //                                          @RequestParam("gearID") int gearID){
-    //     String username = SecurityContextHolder.getContext().getAuthentication().getName();
-    //     Person person = repository.findByEmail(username);
-    //     int[][] statsArray = person.getStatsArray();
-
-    //     int gearHealthAdded = 0;
-    //     int gearDamageAdded = 0;
-
-    //     JSONParser parser = new JSONParser();
-    //     try {
-    //         Object obj = parser.parse(new FileReader("gear.json"));
-    //         JSONObject jsonObject = (JSONObject)obj;
-    //         JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
-
-    //         for (int i = 0; i < gearArray.size(); i++) {
-    //             JSONObject gear = (JSONObject) gearArray.get(i);
-    //             // Use the correct field name for gearID/id
-    //             if (gearID == (int) (long) gear.get("gearID") || gearID == (int) (long) gear.get("id")) {
-    //                 gearHealthAdded = (int) (long) gear.get("healthAdded"); // Correct field name
-    //                 gearDamageAdded = (int) (long) gear.get("damageAdded"); // Correct field name
-    //                 break;
-    //             }
-    //         }
-    //     } catch (Exception e) {
-    //         e.printStackTrace();
-    //     }
-    //     if (equip) {
-    //         statsArray[0][1] += gearHealthAdded;
-    //         statsArray[1][1] += gearDamageAdded;
-    //     } else {
-    //         statsArray[0][1] -= gearHealthAdded;
-    //         statsArray[1][1] -= gearDamageAdded;
-    //     }
-
-    //     person.setStatsArray(statsArray);
-    //     repository.save(person);
-    //     return new ResponseEntity<>(person, HttpStatus.OK);
-    // }
 
 }
