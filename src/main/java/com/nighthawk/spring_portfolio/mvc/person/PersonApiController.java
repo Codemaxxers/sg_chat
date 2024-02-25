@@ -552,6 +552,197 @@ public class PersonApiController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+    @PostMapping("/equipWeapon")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> equipWeapon(@RequestParam("weaponID") int weaponID) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        int[][] statsArray = person.getStatsArray();
+
+        int gearHealthAdded = 0;
+        int gearDamageAdded = 0;
+  
+        int currentWeapon = person.getWeaponGearIdEquipped();
+
+        List<Integer> inventory = person.getInventory();
+        if (!inventory.contains(weaponID)) {
+            return new ResponseEntity<>("Gear with ID of " + weaponID + " is not in this account's inventory", HttpStatus.BAD_REQUEST);
+        }
+
+        if (currentWeapon >= 2000 && currentWeapon < 3000) {
+            unequipWeaponMethod(person);
+        }
+        
+
+        if ( weaponID < 2000 || weaponID > 2999) {
+            return new ResponseEntity<>("ID does not match an armor item id range of 2000 to 2999", HttpStatus.BAD_REQUEST);
+        }
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("gear.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+
+            for (int i = 0; i < gearArray.size(); i++) {
+                JSONObject gear = (JSONObject) gearArray.get(i);
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && weaponID == gearID.intValue()) || (id != null && weaponID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        statsArray[0][1] += gearHealthAdded;
+        statsArray[1][1] += gearDamageAdded;
+
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
+        person.setStatsArray(statsArray);
+        person.setWeaponGearIdEquipped(weaponID);
+        repository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @PostMapping("/unequipWeapon")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> unequipWeapon() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        int[][] statsArray = person.getStatsArray();
+        int weaponID = person.getWeaponGearIdEquipped();
+
+        int gearHealthAdded = 0;
+        int gearDamageAdded = 0;
+  
+        int currentWeapon = person.getWeaponGearIdEquipped();
+
+        if ( currentWeapon == 0) {
+            return new ResponseEntity<>("No weapon equipped", HttpStatus.BAD_REQUEST);
+        }
+
+        if ( weaponID < 2000 || weaponID > 2999) {
+            return new ResponseEntity<>("ID does not match an weapon item id range of 2000 to 2999", HttpStatus.BAD_REQUEST);
+        }
+        
+        if (currentWeapon != weaponID) {
+            return new ResponseEntity<>("Weapon equipped does match id of " + weaponID + " which is being requested", HttpStatus.BAD_REQUEST);
+        }
+
+
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("gear.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+
+            for (int i = 0; i < gearArray.size(); i++) {
+                JSONObject gear = (JSONObject) gearArray.get(i);
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && weaponID == gearID.intValue()) || (id != null && weaponID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        statsArray[0][1] -= gearHealthAdded;
+        statsArray[1][1] -= gearDamageAdded;
+
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
+        person.setStatsArray(statsArray);
+        person.setArmorGearIdEquipped(0);
+        repository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    // for equipping another armor if one is already equipped
+    private void unequipWeaponMethod(Person person) {
+        int[][] statsArray = person.getStatsArray();
+        int armorID = person.getArmorGearIdEquipped();
+
+        int gearHealthAdded = 0;
+        int gearDamageAdded = 0;
+  
+        JSONParser parser = new JSONParser();
+        try {
+            Object obj = parser.parse(new FileReader("gear.json"));
+            JSONObject jsonObject = (JSONObject)obj;
+            JSONArray gearArray = (JSONArray) jsonObject.get("items"); // Correct field name
+
+            for (int i = 0; i < gearArray.size(); i++) {
+                JSONObject gear = (JSONObject) gearArray.get(i);
+                Long gearID = (Long) gear.get("gearID");
+                Long id = (Long) gear.get("id");
+                if ((gearID != null && armorID == gearID.intValue()) || (id != null && armorID == id.intValue())) {
+                    Long healthAddedLong = (Long) gear.get("healthAdded");
+                    Long damageAddedLong = (Long) gear.get("damageAdded");
+                    if (healthAddedLong != null && damageAddedLong != null) {
+                        int healthAdded = healthAddedLong.intValue();
+                        int damageAdded = damageAddedLong.intValue();
+                        gearHealthAdded = healthAdded;
+                        gearDamageAdded = damageAdded;
+                        break;
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        statsArray[0][1] -= gearHealthAdded;
+        statsArray[1][1] -= gearDamageAdded;
+
+        int calculatedPower = arraySum(statsArray);
+        person.setPower(calculatedPower);
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
+        person.setStatsArray(statsArray);
+        person.setArmorGearIdEquipped(0);
+        repository.save(person);
+    }
+
     // adds everything in statsArray to calculate "power"
     public static int arraySum(int[][] statsArray) {
         int sum = 0;    // sum initializer
