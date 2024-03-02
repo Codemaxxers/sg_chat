@@ -1,6 +1,7 @@
 package com.nighthawk.spring_portfolio.mvc.person;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -205,6 +206,7 @@ public class PersonApiController {
             return new ResponseEntity<>("Gear with ID of " + gearID + " is already in this account's inventory", HttpStatus.BAD_REQUEST);
         }
         inventory.add(gearID);
+        Collections.sort(inventory); // Sort the inventory
         person.setInventory(inventory);
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
@@ -575,7 +577,7 @@ public class PersonApiController {
         
 
         if ( weaponID < 2000 || weaponID > 2999) {
-            return new ResponseEntity<>("ID does not match an armor item id range of 2000 to 2999", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("ID does not match an weapon item id range of 2000 to 2999", HttpStatus.BAD_REQUEST);
         }
 
         JSONParser parser = new JSONParser();
@@ -687,15 +689,15 @@ public class PersonApiController {
         person.setTotalDamage(totalDamage);
 
         person.setStatsArray(statsArray);
-        person.setArmorGearIdEquipped(0);
+        person.setWeaponGearIdEquipped(0);
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
-    // for equipping another armor if one is already equipped
+    // for equipping another weapon if one is already equipped
     private void unequipWeaponMethod(Person person) {
         int[][] statsArray = person.getStatsArray();
-        int armorID = person.getArmorGearIdEquipped();
+        int weaponID = person.getWeaponGearIdEquipped();
 
         int gearHealthAdded = 0;
         int gearDamageAdded = 0;
@@ -710,7 +712,7 @@ public class PersonApiController {
                 JSONObject gear = (JSONObject) gearArray.get(i);
                 Long gearID = (Long) gear.get("gearID");
                 Long id = (Long) gear.get("id");
-                if ((gearID != null && armorID == gearID.intValue()) || (id != null && armorID == id.intValue())) {
+                if ((gearID != null && weaponID == gearID.intValue()) || (id != null && weaponID == id.intValue())) {
                     Long healthAddedLong = (Long) gear.get("healthAdded");
                     Long damageAddedLong = (Long) gear.get("damageAdded");
                     if (healthAddedLong != null && damageAddedLong != null) {
@@ -739,7 +741,7 @@ public class PersonApiController {
         person.setTotalDamage(totalDamage);
 
         person.setStatsArray(statsArray);
-        person.setArmorGearIdEquipped(0);
+        person.setWeaponGearIdEquipped(0);
         repository.save(person);
     }
 
