@@ -19,14 +19,14 @@ jobs:
       - name: Update all branches
         run: |
           git fetch --all
-          # Exclude the master branch explicitly to ensure it's not modified
           for branch in $(git branch -r | grep -vE "origin/master$" | sed 's/origin\///'); do
             echo "Creating pull request for branch $branch"
             git checkout -b update-master-$branch origin/$branch
-            git merge master
+            git merge master --allow-unrelated-histories
             git push origin update-master-$branch
             gh pr create --base $branch --head update-master-$branch --title "Update $branch from master" --body "This PR updates $branch with the latest changes from the master branch."
           done
+
 
       - name: Set up GitHub CLI
         uses: actions/setup-go@v2
