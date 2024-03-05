@@ -24,13 +24,30 @@ jobs:
       - name: Update all branches
         run: |
           git fetch --all
+          failed_branches=""
           for branch in $(git branch -r | grep -vE "origin/master$" | sed 's/origin\///'); do
             echo "Creating pull request for branch $branch"
             git checkout -b update-master-$branch origin/$branch
-            git merge master --allow-unrelated-histories
-            git push origin update-master-$branch
-            gh pr create --base $branch --head update-master-$branch --title "Update $branch from master" --body "This PR updates $branch with the latest changes from the master branch."
+            if ! git merge master --allow-unrelated-histories; then
+              echo "Merge failed for branch $branch"
+              failed_branches+="$branch\n"
+              git merge --abort
+            else
+              git push origin update-master-$branch
+              gh pr create --base $branch --head update-master-$branch --title "Update $branch from master" --body "This PR updates $branch with the latest changes from the master branch."
+            fi
           done
+          echo -e "$failed_branches" > failed_branches.txt
+
+      - name: Report failed merges
+        if: always()
+        run: |
+          if [ -s failed_branches.txt ]; then
+            echo "The following branches could not be merged:"
+            cat failed_branches.txt
+          else
+            echo "All branches were updated successfully."
+          fi
 
       - name: Set up GitHub CLI
         uses: actions/setup-go@v2
