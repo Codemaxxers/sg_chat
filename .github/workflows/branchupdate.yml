@@ -54,15 +54,16 @@ jobs:
               git merge --abort
             else
               git pull --rebase origin $branch || echo "Note: Could not rebase $branch - manual check required"
-              if ! git push origin update-master-$branch; then
-                echo "Push failed for branch $branch, may require manual intervention"
-              else
-                # Ensure GH_TOKEN is used for GitHub CLI commands
+              git push origin update-master-$branch
+              # Check for any differences before creating a pull request
+              if ! git diff --quiet origin/$branch update-master-$branch; then
                 if ! GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr view --repo ${{ github.repository }} --ref update-master-$branch > /dev/null 2>&1; then
                   GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr create --base $branch --head update-master-$branch --title "Update $branch from master" --body "This PR updates $branch with the latest changes from the master branch."
                 else
                   echo "Pull request already exists for branch $branch"
                 fi
+              else
+                echo "No changes to merge between $branch and update-master-$branch"
               fi
             fi
           done
