@@ -24,9 +24,10 @@ jobs:
           sudo apt update
           sudo apt install gh
 
+      # Authenticate GitHub CLI with GITHUB_TOKEN set as GH_TOKEN
       - name: Authenticate GitHub CLI
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: gh auth setup-git
 
       # Checkout master branch after GitHub CLI setup
@@ -47,20 +48,18 @@ jobs:
           for branch in $(git branch -r | grep -vE "origin/master$" | sed 's/origin\///'); do
             echo "Creating pull request for branch $branch"
             git checkout -b update-master-$branch origin/$branch
-            # Attempt to merge master into the current branch
             if ! git merge master --allow-unrelated-histories --no-ff; then
               echo "Merge failed for branch $branch"
               failed_branches+="$branch\n"
               git merge --abort
             else
-              # Attempt to rebase or pull changes before pushing
               git pull --rebase origin $branch || echo "Note: Could not rebase $branch - manual check required"
-              # Attempt to push the changes, handle non-fast-forward updates gracefully
               if ! git push origin update-master-$branch; then
                 echo "Push failed for branch $branch, may require manual intervention"
               else
-                if ! gh pr view --repo ${{ github.repository }} --ref update-master-$branch > /dev/null 2>&1; then
-                  gh pr create --base $branch --head update-master-$branch --title "Update $branch from master" --body "This PR updates $branch with the latest changes from the master branch."
+                # Ensure GH_TOKEN is used for GitHub CLI commands
+                if ! GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr view --repo ${{ github.repository }} --ref update-master-$branch > /dev/null 2>&1; then
+                  GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr create --base $branch --head update-master-$branch --title "Update $branch from master" --body "This PR updates $branch with the latest changes from the master branch."
                 else
                   echo "Pull request already exists for branch $branch"
                 fi
