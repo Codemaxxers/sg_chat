@@ -2,7 +2,7 @@ name: Update Branches
 
 on:
   schedule:
-    - cron: '0 0 * * *' # Run daily at midnight :D
+    - cron: '0 0 * * *' # Run daily at midnight
   push:
     branches:
       - master
@@ -11,6 +11,25 @@ jobs:
   update-branches:
     runs-on: ubuntu-latest
     steps:
+      # Set up GitHub CLI before its usage
+      - name: Set up GitHub CLI
+        uses: actions/setup-go@v2
+        with:
+          go-version: '^1.16.1'
+      
+      - name: Install GitHub CLI
+        run: |
+          curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+          sudo apt update
+          sudo apt install gh
+
+      - name: Authenticate GitHub CLI
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh auth setup-git
+
+      # Checkout master branch after GitHub CLI setup
       - name: Checkout master branch
         uses: actions/checkout@v2
         with:
@@ -52,20 +71,3 @@ jobs:
           else
             echo "All branches were updated successfully."
           fi
-
-      - name: Set up GitHub CLI
-        uses: actions/setup-go@v2
-        with:
-          go-version: '^1.16.1'
-
-      - name: Install GitHub CLI
-        run: |
-          curl -sSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-          echo "deb [signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-          sudo apt update
-          sudo apt install gh
-
-      - name: Authenticate GitHub CLI
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: gh auth setup-git
