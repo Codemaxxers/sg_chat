@@ -235,9 +235,9 @@ public class Person {
         p8.setTotalDamage(100);
 
         Person p9 = new Person();
-        p9.setName("toby");
-        p9.setEmail("toby@gmail.com");
-        p9.setPassword("123Toby!");
+        p9.setName("hop");
+        p9.setEmail("hop@gmail.com");
+        p9.setPassword("123Hop!");
         p9.setCsaPoints(0);
         p9.setCspPoints(0);
         p9.setProfilePicInt(0);
