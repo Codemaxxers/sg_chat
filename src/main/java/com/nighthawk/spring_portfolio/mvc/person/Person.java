@@ -230,8 +230,36 @@ public class Person {
         p7.setTotalDamage(100);
         p7.setFinishedTutorial(false);
 
+        Person p8 = new Person();
+        p8.setName("toby");
+        p8.setEmail("toby@gmail.com");
+        p8.setPassword("123Toby!");
+        p8.setCsaPoints(0);
+        p8.setCspPoints(0);
+        p8.setProfilePicInt(0);
+        p8.setAccountLevel(1);
+        p8.setStatsArray(baseStatsArray);
+        p8.setInventory(baseInventory);
+        p8.setPower(200);
+        p8.setTotalHealth(100);
+        p8.setTotalDamage(100);
+
+        Person p9 = new Person();
+        p9.setName("hop");
+        p9.setEmail("hop@gmail.com");
+        p9.setPassword("123Hop!");
+        p9.setCsaPoints(0);
+        p9.setCspPoints(0);
+        p9.setProfilePicInt(0);
+        p9.setAccountLevel(1);
+        p9.setStatsArray(baseStatsArray);
+        p9.setInventory(baseInventory);
+        p9.setPower(200);
+        p9.setTotalHealth(100);
+        p9.setTotalDamage(100);
+
         // Array definition and data initialization
-        Person persons[] = {p1, p2, p3, p4, p5, p6, p7};
+        Person persons[] = {p1, p2, p3, p4, p5, p6, p7, p8, p9};
         return(persons);
     }
 
