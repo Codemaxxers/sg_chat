@@ -183,6 +183,7 @@ public class PersonApiController {
         int weaponGearIdEquipped = 0;
         int armorGearIdEquipped = 0;
         int accessoryGearIdEquipped = 0;
+        boolean finishedTutorial = false;
         ArrayList<Integer> inventory = new ArrayList<>();
         // base health, gear health, base attack, gear attack
         int[][] statsArray = {{100, 0}, {100, 0}};
@@ -190,7 +191,7 @@ public class PersonApiController {
         int totalHealth = 100;
         int totalDamage = 100;
         
-        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray, inventory, weaponGearIdEquipped, armorGearIdEquipped, accessoryGearIdEquipped, power, totalHealth, totalDamage);
+        Person person = new Person(email, password, name, csaPoints, cspPoints, profilePicInt, accountPoints, accountLevel, statsArray, inventory, weaponGearIdEquipped, armorGearIdEquipped, accessoryGearIdEquipped, power, totalHealth, totalDamage, finishedTutorial);
         personDetailsService.save(person);
     
         return new ResponseEntity<>(email + " is created successfully", HttpStatus.CREATED);
@@ -208,6 +209,16 @@ public class PersonApiController {
         inventory.add(gearID);
         Collections.sort(inventory); // Sort the inventory
         person.setInventory(inventory);
+        repository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @PostMapping("finishedTutorial")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> finishedTutorial() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        person.setFinishedTutorial(true);
         repository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
