@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import java.util.Random;
 
 
 @RestController
@@ -23,11 +22,24 @@ public class QuestionController {
         return questionService.getAllQuestions();
     }
 
-    //Get Question by Course
+    //Get a random question
     @GetMapping("/randomQuestion/{unit}")
     public Question getRandomQuestionByUnit(@PathVariable String unit) {
-        // Fetch a random question from the database based on the unit
-        return questionRepository.findRandomQuestionByUnit(unit);
+        // Fetch all questions for the given unit
+        List<Question> questions = questionRepository.findAllByUnit(unit);
+        
+        // Check if there are any questions for the given unit
+        if (questions.isEmpty()) {
+            // Handle the case when there are no questions for the given unit
+            // For example, you can return an error message or throw an exception
+            throw new RuntimeException("No questions found for unit: " + unit);
+        }
+        
+        // Generate a random index within the range of the list size
+        int randomIndex = new Random().nextInt(questions.size());
+        
+        // Return the randomly selected question
+        return questions.get(randomIndex);
     }
 
     //Add Question
