@@ -11,4 +11,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     @Query(nativeQuery = true, name = "Question.findByCourse")
     List<Question> findByCourse(String courseName);
+
+    Question findRandomQuestionByUnit(String unit);
 }
