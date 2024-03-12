@@ -16,6 +16,8 @@ import com.nighthawk.spring_portfolio.mvc.person.Person;
 import com.nighthawk.spring_portfolio.mvc.person.PersonDetailsService;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRole;
 import com.nighthawk.spring_portfolio.mvc.person.PersonRoleJpaRepository;
+import com.nighthawk.spring_portfolio.mvc.questions.QuestionRepository;
+import com.nighthawk.spring_portfolio.mvc.questions.Question;
 
 @Component
 @Configuration // Scans Application for ModelInit Bean, this detects CommandLineRunner
@@ -24,6 +26,7 @@ public class ModelInit {
     @Autowired PersonDetailsService personService;
     @Autowired PersonRoleJpaRepository roleRepo;
     @Autowired EnemyJPA enemyRepo; // Add enemy repository
+    @Autowired QuestionRepository questionRepo; // Add question repository
 
     @Bean
     CommandLineRunner run() {  // The run() method will be executed after the application starts
@@ -49,6 +52,15 @@ public class ModelInit {
                     enemyRepo.save(enemy);
                 }
             }
+
+            Question[] questionArray = Question.init();
+            if (questionRepo.findAll().isEmpty()) {
+                for (Question question : questionArray) {
+                    questionRepo.save(question);
+                }
+                return;
+            }
+            
 
             // Person database is populated with test data
             Person[] personArray = Person.init();
