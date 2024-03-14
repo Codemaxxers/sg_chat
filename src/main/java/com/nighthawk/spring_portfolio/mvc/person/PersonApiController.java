@@ -68,6 +68,7 @@ public class PersonApiController {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = repository.findByEmail(username);
 
+
         // Create a map to hold the desired properties
         Map<String, Object> response = new HashMap<>();
         response.put("name", person.getName());
@@ -78,10 +79,16 @@ public class PersonApiController {
         response.put("weaponGearIdEquipped", person.getWeaponGearIdEquipped());
         response.put("armorGearIdEquipped", person.getArmorGearIdEquipped());
         response.put("accessoryGearIdEquipped", person.getAccessoryGearIdEquipped());
+        response.put("nextLevelXPThreshold", calculateNextLevelXPThreshold(person.getAccountLevel()));
+        response.put("previousLevelXPThreshold", calculatePreviousLevelXPThreshold(person.getAccountLevel()));
+        response.put("totalHealth", person.getTotalHealth());
+        response.put("totalDamage", person.getTotalDamage());
+        response.put("finishedTutorial", person.isFinishedTutorial());
         // Add more properties as needed
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    
 
     /*
     GET individual Person using ID
@@ -312,6 +319,12 @@ public class PersonApiController {
         person.setStatsArray(statsArray);
         // END OF LEVEL STATS CALCULATION
 
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
+
         repository.save(person);  // Save the updated Person object
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
@@ -356,6 +369,12 @@ public class PersonApiController {
         statsArray[1][0] = baseStats[accountLevelMatchingStats];
         person.setStatsArray(statsArray);
         // END OF LEVEL STATS CALCULATION
+
+        int totalHealth = calculateTotalHealth(statsArray);
+        person.setTotalHealth(totalHealth);
+
+        int totalDamage = calculateTotalDamage(statsArray);
+        person.setTotalDamage(totalDamage);
         
         
         repository.save(person);  // Save the updated Person object
@@ -786,7 +805,17 @@ public class PersonApiController {
         }
         return totalDamage;
     }
-    
 
+    public static int calculateNextLevelXPThreshold(int currentLevel) {
+        int[] levels = {0, 100, 221, 354, 500, 661, 839, 1034, 1248, 1485, 1746, 2031, 2345, 2690, 3069, 3483, 3937, 4438, 4994, 5615, 6301, 7064, 7910, 8857, 9914, 11098, 12389, 13800, 15343, 17029};
+        int pointsThreshold = levels[currentLevel];
+        return pointsThreshold;
+    }
+
+    public static int calculatePreviousLevelXPThreshold(int currentLevel) {
+        int[] levels = {0, 100, 221, 354, 500, 661, 839, 1034, 1248, 1485, 1746, 2031, 2345, 2690, 3069, 3483, 3937, 4438, 4994, 5615, 6301, 7064, 7910, 8857, 9914, 11098, 12389, 13800, 15343, 17029};
+        int pointsThreshold = levels[currentLevel - 1];
+        return pointsThreshold;
+    }
 
 }
