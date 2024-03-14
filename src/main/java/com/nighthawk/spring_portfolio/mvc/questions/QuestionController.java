@@ -1,6 +1,7 @@
 package com.nighthawk.spring_portfolio.mvc.questions;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,12 +45,14 @@ public class QuestionController {
 
     //Add Question
     @PostMapping("/makeQuestion")
+    @PreAuthorize("isAuthenticated()")
     public Question makeQuestion(@RequestBody Question question) {
         return questionRepository.save(question);
     }
     
     //Delete Question
     @DeleteMapping("/deleteQuestion/{id}")
+    @PreAuthorize("isAuthenticated()")
     public void deleteQuestion(@PathVariable Long id) {
         questionRepository.deleteById(id);
     }

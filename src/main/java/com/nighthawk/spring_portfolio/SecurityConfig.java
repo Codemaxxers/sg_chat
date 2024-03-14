@@ -72,6 +72,8 @@ public class SecurityConfig {
 					.requestMatchers("/reading/**").hasAnyAuthority("ROLE_ADMIN")
 					.requestMatchers("/mvc/person/update/**", "/mvc/person/delete/**").hasAnyAuthority("ROLE_ADMIN")
 					.requestMatchers("/api/person/delete/**").hasAnyAuthority("ROLE_ADMIN")
+					.requestMatchers("/api/questions/deleteQuestion/**").hasAnyAuthority("ROLE_ADMIN")
+					.requestMatchers("/api/questions/makeQuestion/**").hasAnyAuthority("ROLE_ADMIN")
 					.requestMatchers("/**").permitAll()
 				)
 				// support cors
