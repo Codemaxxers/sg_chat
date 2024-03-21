@@ -23,4 +23,5 @@ public class EnemyController {
         List<Enemy> enemies = enemyRepository.findAll();
         return new ResponseEntity<>(enemies, HttpStatus.OK);
     }
+
 }

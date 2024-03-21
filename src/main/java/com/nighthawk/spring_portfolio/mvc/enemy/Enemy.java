@@ -29,75 +29,32 @@ public class Enemy {
     private int attack;
     private int defense;
     private int level;
-    private int points;
+    private String unit;
 
-    public Enemy(String name, int health, int attack, int defense, int level, int points) {
+    public Enemy(String name, int health, int attack, int defense, int level, String unit) {
         this.name = name;
         this.health = health;
         this.attack = attack;
         this.defense = defense;
         this.level = level;
-        this.points = points;
+        this.unit = unit;
     }
 
     public static List<Enemy> createInitialData() {
         ArrayList<Enemy> enemies = new ArrayList<>();
 
-        enemies.add(new Enemy("Pixie", 10, 1, 1, 1, 1));
-        enemies.add(new Enemy("Troll", 20, 5, 2, 2, 3));
-        enemies.add(new Enemy("Golem", 30, 2, 5, 5, 7));
-        enemies.add(new Enemy("Goblin", 15, 10, 2, 10, 7));
-        enemies.add(new Enemy("Dragon", 50, 20, 10, 15, 15));
+        enemies.add(new Enemy("Pixie", 10, 1, 1, 1, "Island1"));
+        enemies.add(new Enemy("Troll", 20, 5, 2, 2, "Island1"));
+        enemies.add(new Enemy("Golem", 30, 2, 5, 5, "Island1"));
+        enemies.add(new Enemy("Goblin", 15, 10, 2, 5, "Island2"));
+        enemies.add(new Enemy("Ghost", 25, 8, 5, 7, "Island2"));
+        enemies.add(new Enemy("Dragon", 35, 12, 8, 10, "Island2"));
+        enemies.add(new Enemy("Snow Man", 35, 15, 10, 10, "Island3"));
+        enemies.add(new Enemy("Snow Golem", 35, 20, 10, 12, "Island3"));
+        enemies.add(new Enemy("Ice Wizard", 45, 25, 10, 15, "Island3"));
         return enemies;
     }
 
-    public String setName(String name) {
-        return this.name = name;
-    }
-
-    public int setHealth(int health) {
-        return this.health = health;
-    }
-
-    public int setAttack(int attack) {
-        return this.attack = attack;
-    }
-
-    public int setDefense(int defense) {
-        return this.defense = defense;
-    }
-
-    public int setLevel(int level) {
-        return this.level = level;
-    }
-
-    public int setPoints(int points) {
-        return this.points = points;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public int getHealth() {
-        return this.health;
-    }
-
-    public int getAttack() {
-        return this.attack;
-    }
-
-    public int getDefense() {
-        return this.defense;
-    }
-
-    public int getLevel() {
-        return this.level;
-    }
-
-    public int getPoints() {
-        return this.points;
-    }
 
     public static List<Enemy> init() {
         return createInitialData();
