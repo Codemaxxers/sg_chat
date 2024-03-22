@@ -29,29 +29,29 @@ public class Enemy {
     private int attack;
     private int defense;
     private int level;
-    private String unit;
+    private String type;
 
-    public Enemy(String name, int health, int attack, int defense, int level, String unit) {
+    public Enemy(String name, int health, int attack, int defense, int level, String type) {
         this.name = name;
         this.health = health;
         this.attack = attack;
         this.defense = defense;
         this.level = level;
-        this.unit = unit;
+        this.type = type;
     }
 
     public static List<Enemy> createInitialData() {
         ArrayList<Enemy> enemies = new ArrayList<>();
 
-        enemies.add(new Enemy("Pixie", 10, 1, 1, 1, "Island1"));
-        enemies.add(new Enemy("Troll", 20, 5, 2, 2, "Island1"));
-        enemies.add(new Enemy("Golem", 30, 2, 5, 5, "Island1"));
-        enemies.add(new Enemy("Goblin", 15, 10, 2, 5, "Island2"));
-        enemies.add(new Enemy("Ghost", 25, 8, 5, 7, "Island2"));
-        enemies.add(new Enemy("Dragon", 35, 12, 8, 10, "Island2"));
-        enemies.add(new Enemy("Snow Man", 35, 15, 10, 10, "Island3"));
-        enemies.add(new Enemy("Snow Golem", 35, 20, 10, 12, "Island3"));
-        enemies.add(new Enemy("Ice Wizard", 45, 25, 10, 15, "Island3"));
+        enemies.add(new Enemy("Pixie", 10, 1, 1, 1, "Grass"));
+        enemies.add(new Enemy("Troll", 20, 5, 2, 2, "Grass"));
+        enemies.add(new Enemy("Golem", 30, 2, 5, 5, "Grass"));
+        enemies.add(new Enemy("Goblin", 15, 10, 2, 5, "Dark"));
+        enemies.add(new Enemy("Ghost", 25, 8, 5, 7, "Dark"));
+        enemies.add(new Enemy("Dragon", 35, 12, 8, 10, "Dark"));
+        enemies.add(new Enemy("Snow Man", 35, 15, 10, 10, "Snow"));
+        enemies.add(new Enemy("Snow Golem", 35, 20, 10, 12, "Snow"));
+        enemies.add(new Enemy("Ice Wizard", 45, 25, 10, 15, "Snow"));
         return enemies;
     }
 
