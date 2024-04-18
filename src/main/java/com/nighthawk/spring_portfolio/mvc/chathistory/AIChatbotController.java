@@ -36,7 +36,7 @@ public class AIChatbotController {
 	@Autowired
 	ChatJpaRepository chatJpaRepository;
 	
-	private static final String key = "sess-LIx8f9EKlvC4XxAfeeVhgdV2tMn2Ksps1YI20zVL";
+	private static final String key = "sess-aLU61UoiyiXB9sR3QieFblxUuHS6v6Vn79yGDxm3";
 
 	// create chat GPT assistant id
 	private static String assistantId = "asst_8OuJGh5SmCLAhKpRhdYuYgmQ";
