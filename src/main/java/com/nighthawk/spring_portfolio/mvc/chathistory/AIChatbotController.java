@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.web.bind.annotation.RestController;
 
 // AI Chat Bot Controller based on Chat GPT 3.5 API
@@ -36,7 +37,9 @@ public class AIChatbotController {
 	@Autowired
 	ChatJpaRepository chatJpaRepository;
 	
-	private static final String key = "sess-aLU61UoiyiXB9sR3QieFblxUuHS6v6Vn79yGDxm3";
+	static Dotenv dotenv = Dotenv.load();
+
+	private static final String key = dotenv.get("key");
 
 	// create chat GPT assistant id
 	private static String assistantId = "asst_8OuJGh5SmCLAhKpRhdYuYgmQ";
