@@ -59,7 +59,7 @@ public class Question {
         Question[] questions = new Question[30];
     
         // CSP Questions
-        questions[0] = new Question("What is an example of binary data?", "010101", "111000", "100101", "001110", 1, 1, "csp", 40);
+        questions[0] = new Question("What is an example of binary data?", "22222", "111000", "303030300", "00600903", 1, 1, "csp", 40);
         questions[1] = new Question("Which of the following is a characteristic of a good password?", "Simple", "Easily guessable", "Complex and unique", "Short", 3, 2, "csp", 35);
         questions[2] = new Question("What is an example of a lossless compression algorithm?", "MP3", "JPEG", "GIF", "ZIP", 4, 2, "csp", 30);
         questions[3] = new Question("What does the acronym 'URL' stand for?", "Uniform Resource Locator", "Universal Record Locator", "Unique Resource Link", "Universal Resource Locator", 1, 1, "csp", 40);
