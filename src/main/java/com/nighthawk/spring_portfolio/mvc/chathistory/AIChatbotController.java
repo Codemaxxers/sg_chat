@@ -306,6 +306,8 @@ public class AIChatbotController {
 
 	// main method to testing
 	public static void main(String[] args) throws Exception {
+		String aiKey = System.getenv("AI_KEY");
+        System.out.println("AI key: " + aiKey);
 		AIChatbotController ai = new AIChatbotController();
 		String response = ai.getResponseFromAI("Hi");
 		System.out.println(response);
