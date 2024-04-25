@@ -11,7 +11,7 @@ import org.json.simple.JSONObject;
 
 @Entity
 public class Chat {
-	 // automatic unique identifier for Person record
+	 // automatic unique identifier for Person recordsz
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
