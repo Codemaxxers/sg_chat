@@ -24,7 +24,6 @@ public class Enemy {
 
     @Column(unique=true)
     private String name;
-
     private int health;
     private int attack;
     private int defense;
