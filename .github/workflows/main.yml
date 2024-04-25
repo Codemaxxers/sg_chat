@@ -1,9 +1,9 @@
-name: Access AI Key Example
+name: Access AI Key
 
 on:
   push:
     branches:
-      - main
+      - aichat   
 
 jobs:
   access_secret_job:
@@ -14,6 +14,6 @@ jobs:
         
       - name: Access secret
         env:
-          AI_KEY: ${{ secrets.ai_key }}
+          AI_KEY: ${{ secrets.AI_KEY }}
         run: |
           echo "The AI key is $AI_KEY"
