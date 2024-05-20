@@ -119,13 +119,17 @@ public class PersonApiController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e88d8a6 (data base)
     @GetMapping("/leaderboardCyber")
     public List<Person> getLeaderboardCyber() {
         // Get top 5 users based on cyberPoints
         return repository.findTop5ByOrderByCyberPointsDesc();
     }
 
+<<<<<<< HEAD
     @GetMapping("/gamesPlayed")
     public List<Person> getGamesPlayed() {
         // Get top 5 users based on cyberPoints
@@ -140,6 +144,8 @@ public class PersonApiController {
 
 
 >>>>>>> 70fe2a2 (keys collected get games played post)
+=======
+>>>>>>> e88d8a6 (data base)
     /*
     DELETE individual Person using ID :)
      */
@@ -412,7 +418,10 @@ public class PersonApiController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> e88d8a6 (data base)
     @PostMapping("/addPointsCyber")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Person> addPointsCyber(@RequestParam("points") int points) {
@@ -439,6 +448,11 @@ public class PersonApiController {
         person.setAccountLevel(newLevel);
         // END OF ACCOUNT LEVEL CALCULATION
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> e88d8a6 (data base)
         // START OF LEVEL STATS CALCULATION
         int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};
         int accountLevelMatchingStats = newLevel - 1;
@@ -458,7 +472,10 @@ public class PersonApiController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+<<<<<<< HEAD
 >>>>>>> 70fe2a2 (keys collected get games played post)
+=======
+>>>>>>> e88d8a6 (data base)
 
     @PostMapping("/changeProfilePic")
     @PreAuthorize("isAuthenticated()")
