@@ -49,6 +49,7 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 70fe2a2 (keys collected get games played post)
 =======
@@ -59,6 +60,8 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 >>>>>>> 4e117c2 (keys collected get games played post)
 =======
 <<<<<<< HEAD
+=======
+>>>>>>> f4c64c9 (data base)
 =======
 <<<<<<< HEAD
 =======
@@ -98,8 +101,16 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 =======
 =======
 >>>>>>> 70fe2a2 (keys collected get games played post)
+<<<<<<< HEAD
 >>>>>>> f25cfd0 (keys collected get games played post)
+<<<<<<< HEAD
 >>>>>>> 0ec9519 (keys collected get games played post)
+=======
+=======
+=======
+>>>>>>> e88d8a6 (data base)
+>>>>>>> 01cc54d (data base)
+>>>>>>> f4c64c9 (data base)
     // You can use no query or query
 
     @Query("SELECT p FROM Person p ORDER BY p.cspPoints DESC")
@@ -113,6 +124,11 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> f4c64c9 (data base)
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -174,8 +190,16 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 =======
 =======
 >>>>>>> 70fe2a2 (keys collected get games played post)
+<<<<<<< HEAD
 >>>>>>> f25cfd0 (keys collected get games played post)
+<<<<<<< HEAD
 >>>>>>> 0ec9519 (keys collected get games played post)
+=======
+=======
+=======
+>>>>>>> e88d8a6 (data base)
+>>>>>>> 01cc54d (data base)
+>>>>>>> f4c64c9 (data base)
 }
 
 
