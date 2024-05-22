@@ -20,6 +20,16 @@ public class EnemyController {
         this.enemyRepository = enemyRepository;
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<HttpStatus> deleteEnemy(@PathVariable Long id) {
+        try {
+            enemyRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<Enemy>> getAllEnemies() {
         List<Enemy> enemies = enemyRepository.findAll();

@@ -27,6 +27,7 @@ public class QuestionController {
     @GetMapping("/randomQuestion/{unit}")
     public Question getRandomQuestionByUnit(@PathVariable String unit) {
         // Fetch all questions for the given unit
+        unit = unit.toLowerCase();
         List<Question> questions = questionRepository.findAllByUnit(unit);
         
         // Check if there are any questions for the given unit
