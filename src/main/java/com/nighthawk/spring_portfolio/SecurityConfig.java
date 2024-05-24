@@ -225,6 +225,7 @@ public class SecurityConfig {
 // 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
 // 		return authenticationConfiguration.getAuthenticationManager();
 // 	}
+<<<<<<< HEAD
 =======
 >>>>>>> 33aaaa2 ( Changes to be committed:)
 
@@ -464,6 +465,10 @@ public class SecurityConfig {
 
 	
 <<<<<<< HEAD
+=======
+
+	
+>>>>>>> b4da06a (original security config)
 //     // Provide security configuration
 // 		@Bean
 // 		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -511,9 +516,13 @@ public class SecurityConfig {
 // 			return http.build();
 // 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 // }
 >>>>>>> 2585d01 (original security config)
 >>>>>>> e1ca326 (original security config)
 =======
 // }
 >>>>>>> 4e117c2 (keys collected get games played post)
+=======
+// }
+>>>>>>> b4da06a (original security config)
