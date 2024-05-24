@@ -155,18 +155,27 @@ public class PersonApiController {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 07e1846 (keys collected get games played post)
 =======
 >>>>>>> 732d469 (data base)
 =======
 =======
 >>>>>>> 01cc54d (data base)
+<<<<<<< HEAD
 >>>>>>> f4c64c9 (data base)
+=======
+=======
+>>>>>>> f3a7030 (keys collected get games played post)
+>>>>>>> 07e1846 (keys collected get games played post)
     @GetMapping("/gamesPlayed")
     public List<Person> getGamesPlayed() {
         // Get top 5 users based on cyberPoints
         return repository.findByGamesPlayed();
 =======
+<<<<<<< HEAD
 =======
 >>>>>>> 4e117c2 (keys collected get games played post)
 =======
@@ -189,6 +198,13 @@ public class PersonApiController {
 =======
         return repository.findByGamesPlayed();
 >>>>>>> d167739 (quick changes)
+=======
+    @GetMapping("/gamesPlayed")
+    public List<Person> getGamesPlayed() {
+        // Get top 5 users based on cyberPoints
+        return repository.findTop5ByOrderByGamesPlayedDesc();
+>>>>>>> a9fc670 (keys collected get games played post)
+>>>>>>> 07e1846 (keys collected get games played post)
     }
 
     @GetMapping("/keysCollected")
@@ -198,8 +214,11 @@ public class PersonApiController {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> d167739 (quick changes)
+=======
+>>>>>>> 07e1846 (keys collected get games played post)
         return repository.findByKeysCollected();
     }
 
@@ -235,8 +254,20 @@ public class PersonApiController {
 =======
 =======
 >>>>>>> e88d8a6 (data base)
+<<<<<<< HEAD
 >>>>>>> 01cc54d (data base)
+<<<<<<< HEAD
 >>>>>>> f4c64c9 (data base)
+=======
+=======
+=======
+        return repository.findTop5ByOrderByKeysCollectedDesc();
+    }
+
+
+>>>>>>> a9fc670 (keys collected get games played post)
+>>>>>>> f3a7030 (keys collected get games played post)
+>>>>>>> 07e1846 (keys collected get games played post)
     /*
     DELETE individual Person using ID :)
      */
@@ -565,6 +596,7 @@ public class PersonApiController {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
@@ -580,6 +612,8 @@ public class PersonApiController {
 =======
 =======
 >>>>>>> f4c64c9 (data base)
+=======
+>>>>>>> 07e1846 (keys collected get games played post)
 
 
 =======
@@ -589,11 +623,21 @@ public class PersonApiController {
 =======
 =======
 =======
+>>>>>>> f3a7030 (keys collected get games played post)
+=======
 
 
 >>>>>>> e88d8a6 (data base)
+<<<<<<< HEAD
 >>>>>>> 01cc54d (data base)
+<<<<<<< HEAD
 >>>>>>> f4c64c9 (data base)
+=======
+=======
+=======
+>>>>>>> a9fc670 (keys collected get games played post)
+>>>>>>> f3a7030 (keys collected get games played post)
+>>>>>>> 07e1846 (keys collected get games played post)
         // START OF LEVEL STATS CALCULATION
         int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};
         int accountLevelMatchingStats = newLevel - 1;
