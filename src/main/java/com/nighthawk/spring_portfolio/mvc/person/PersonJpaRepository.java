@@ -149,10 +149,10 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 >>>>>>> f25cfd0 (keys collected get games played post)
 >>>>>>> 0ec9519 (keys collected get games played post)
     @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
-    List<Person> findTop5ByGamesPlayed();
+    List<Person> findByGamesPlayed();
 
     @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
-    List<Person> findTop5ByKeysCollected();
+    List<Person> findByKeysCollected();
 
 <<<<<<< HEAD
 <<<<<<< HEAD

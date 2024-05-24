@@ -162,6 +162,7 @@ public class PersonApiController {
     @GetMapping("/gamesPlayed")
     public List<Person> getGamesPlayed() {
         // Get top 5 users based on cyberPoints
+<<<<<<< HEAD
         return repository.findTop5ByOrderByGamesPlayedDesc();
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -170,6 +171,9 @@ public class PersonApiController {
 >>>>>>> 4e117c2 (keys collected get games played post)
 =======
 >>>>>>> 0ec9519 (keys collected get games played post)
+=======
+        return repository.findByGamesPlayed();
+>>>>>>> d167739 (quick changes)
     }
 
     @GetMapping("/keysCollected")
@@ -178,6 +182,9 @@ public class PersonApiController {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d167739 (quick changes)
         return repository.findByKeysCollected();
     }
 
