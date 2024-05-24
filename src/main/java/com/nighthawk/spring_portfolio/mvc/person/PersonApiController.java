@@ -130,15 +130,23 @@ public class PersonApiController {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     @GetMapping("/gamesPlayed")
     public List<Person> getGamesPlayed() {
         // Get top 5 users based on cyberPoints
         return repository.findByGamesPlayed();
+=======
+    @GetMapping("/gamesPlayed")
+    public List<Person> getGamesPlayed() {
+        // Get top 5 users based on cyberPoints
+        return repository.findTop5ByOrderByGamesPlayedDesc();
+>>>>>>> a9fc670 (keys collected get games played post)
     }
 
     @GetMapping("/keysCollected")
     public List<Person> getKeysCollected() {
         // Get top 5 users based on cyberPoints
+<<<<<<< HEAD
         return repository.findByKeysCollected();
     }
 
@@ -146,6 +154,12 @@ public class PersonApiController {
 >>>>>>> 70fe2a2 (keys collected get games played post)
 =======
 >>>>>>> e88d8a6 (data base)
+=======
+        return repository.findTop5ByOrderByKeysCollectedDesc();
+    }
+
+
+>>>>>>> a9fc670 (keys collected get games played post)
     /*
     DELETE individual Person using ID :)
      */
@@ -449,10 +463,13 @@ public class PersonApiController {
         // END OF ACCOUNT LEVEL CALCULATION
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 
 >>>>>>> e88d8a6 (data base)
+=======
+>>>>>>> a9fc670 (keys collected get games played post)
         // START OF LEVEL STATS CALCULATION
         int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};
         int accountLevelMatchingStats = newLevel - 1;
