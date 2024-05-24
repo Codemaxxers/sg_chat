@@ -48,6 +48,7 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 >>>>>>> 70fe2a2 (keys collected get games played post)
 =======
@@ -56,10 +57,21 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 =======
 >>>>>>> 70fe2a2 (keys collected get games played post)
 >>>>>>> 4e117c2 (keys collected get games played post)
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> f25cfd0 (keys collected get games played post)
+>>>>>>> 0ec9519 (keys collected get games played post)
     List<Person> findTop5ByOrderByGamesPlayedDesc();
 
     List<Person> findTop5ByOrderByKeysCollectedDesc();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -78,6 +90,16 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 >>>>>>> 4e117c2 (keys collected get games played post)
 =======
 >>>>>>> f523596 (data base)
+=======
+=======
+>>>>>>> 821fd7d (data base)
+<<<<<<< HEAD
+>>>>>>> 732d469 (data base)
+=======
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> f25cfd0 (keys collected get games played post)
+>>>>>>> 0ec9519 (keys collected get games played post)
     // You can use no query or query
 
     @Query("SELECT p FROM Person p ORDER BY p.cspPoints DESC")
@@ -89,6 +111,7 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
     @Query("SELECT p FROM Person p ORDER BY p.cyberPoints DESC")
     List<Person> findTop5ByCyberPoints();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -115,12 +138,23 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 =======
 >>>>>>> 70fe2a2 (keys collected get games played post)
 >>>>>>> 4e117c2 (keys collected get games played post)
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> f25cfd0 (keys collected get games played post)
+>>>>>>> 0ec9519 (keys collected get games played post)
     @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
     List<Person> findTop5ByGamesPlayed();
 
     @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
     List<Person> findTop5ByKeysCollected();
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> a9fc670 (keys collected get games played post)
 =======
@@ -132,6 +166,16 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 >>>>>>> 4e117c2 (keys collected get games played post)
 =======
 >>>>>>> f523596 (data base)
+=======
+=======
+>>>>>>> 821fd7d (data base)
+<<<<<<< HEAD
+>>>>>>> 732d469 (data base)
+=======
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> f25cfd0 (keys collected get games played post)
+>>>>>>> 0ec9519 (keys collected get games played post)
 }
 
 
