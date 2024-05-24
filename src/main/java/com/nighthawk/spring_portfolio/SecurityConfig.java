@@ -55,6 +55,7 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -108,6 +109,9 @@ public class SecurityConfig {
 =======
 =======
 >>>>>>> 73ae742 ( Changes to be committed:)
+=======
+
+>>>>>>> 73ae742 ( Changes to be committed:)
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -155,6 +159,9 @@ public class SecurityConfig {
         return source;
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> 73ae742 ( Changes to be committed:)
+=======
 >>>>>>> 73ae742 ( Changes to be committed:)
 }
 
