@@ -46,7 +46,7 @@ public class PersonApiController {
     private PersonDetailsService personDetailsService;
 
     /*
-    GET List of People
+    GET List of People :)
      */
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
