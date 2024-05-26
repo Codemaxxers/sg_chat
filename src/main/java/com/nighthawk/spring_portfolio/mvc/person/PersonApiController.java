@@ -117,7 +117,7 @@ public class PersonApiController {
     }
 
     /*
-    DELETE individual Person using ID
+    DELETE individual Person using ID :)
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Person> deletePerson(@PathVariable long id) {
