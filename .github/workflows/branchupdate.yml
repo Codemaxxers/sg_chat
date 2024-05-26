@@ -46,8 +46,10 @@ jobs:
           git fetch --all
           failed_branches=""
           for branch in $(git branch -r | grep -vE "origin/master$" | sed 's/origin\///'); do
+            clean_branch_name=$(echo $branch | sed 's/update-master-//g')
+            update_branch="update-master-$clean_branch_name"
             echo "Creating pull request for branch $branch"
-            git checkout -b update-master-$branch origin/$branch
+            git checkout -b $update_branch origin/$branch
             git reset --hard origin/$branch # Ensure branch is reset to origin's state
             if ! git merge master --allow-unrelated-histories --no-ff; then
               echo "Merge failed for branch $branch"
@@ -57,24 +59,23 @@ jobs:
               # Try to rebase the branch to include any new commits from the remote branch
               git pull --rebase origin $branch || echo "Note: Could not rebase $branch - manual check required"
               # Attempt to push, using --force-with-lease to prevent overwriting others' work
-              if ! git push --force-with-lease origin update-master-$branch; then
+              if ! git push --force-with-lease origin $update_branch; then
                 echo "Push failed for branch $branch, may require manual intervention"
               else
                 # Check for any differences before creating a pull request
-                if ! git diff --quiet origin/$branch update-master-$branch; then
-                  if ! GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr view --repo ${{ github.repository }} --ref update-master-$branch > /dev/null 2>&1; then
-                    GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr create --base $branch --head update-master-$branch --title "Update $branch from master" --body "This PR updates $branch with the latest changes from the master branch."
+                if ! git diff --quiet origin/$branch $update_branch; then
+                  if ! GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr view --repo ${{ github.repository }} --head $update_branch > /dev/null 2>&1; then
+                    GH_TOKEN=${{ secrets.GITHUB_TOKEN }} gh pr create --base $branch --head $update_branch --title "Update $branch from master" --body "This PR updates $branch with the latest changes from the master branch."
                   else
                     echo "Pull request already exists for branch $branch"
                   fi
                 else
-                  echo "No changes to merge between $branch and update-master-$branch"
+                  echo "No changes to merge between $branch and $update_branch"
                 fi
               fi
             fi
           done
           echo -e "$failed_branches" > failed_branches.txt
-
 
       - name: Report failed merges
         if: always()
