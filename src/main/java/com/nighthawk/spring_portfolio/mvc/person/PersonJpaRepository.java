@@ -40,6 +40,12 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 
     List<Person> findTop5ByOrderByCsaPointsDesc();
 
+    List<Person> findTop5ByOrderByCyberPointsDesc();
+
+    List<Person> findTop5ByOrderByGamesPlayedDesc();
+
+    List<Person> findTop5ByOrderByKeysCollectedDesc();
+
     // You can use no query or query
 
     @Query("SELECT p FROM Person p ORDER BY p.cspPoints DESC")
@@ -47,6 +53,15 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 
     @Query("SELECT p FROM Person p ORDER BY p.csaPoints DESC")
     List<Person> findTop5ByCsaPoints();
+
+    @Query("SELECT p FROM Person p ORDER BY p.cyberPoints DESC")
+    List<Person> findTop5ByCyberPoints();
+
+    @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
+    List<Person> findByGamesPlayed();
+
+    @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
+    List<Person> findByKeysCollected();
 
 }
 
