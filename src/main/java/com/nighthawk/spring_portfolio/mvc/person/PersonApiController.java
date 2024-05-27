@@ -1,11 +1,11 @@
 package com.nighthawk.spring_portfolio.mvc.person;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collections; 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Optional; 
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+
+
 
 
 
@@ -192,128 +195,14 @@ public class PersonApiController {
 >>>>>>> c59be45 (keys collected get games played post)
     @GetMapping("/gamesPlayed")
     public List<Person> getGamesPlayed() {
-        // Get top 5 users based on cyberPoints
-        return repository.findByGamesPlayed();
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
-=======
-=======
->>>>>>> 732d469 (data base)
-=======
->>>>>>> 0ec9519 (keys collected get games played post)
-    @GetMapping("/gamesPlayed")
-    public List<Person> getGamesPlayed() {
-        // Get top 5 users based on cyberPoints
-<<<<<<< HEAD
-        return repository.findTop5ByOrderByGamesPlayedDesc();
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> a9fc670 (keys collected get games played post)
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
-=======
->>>>>>> 0ec9519 (keys collected get games played post)
-=======
-        return repository.findByGamesPlayed();
->>>>>>> d167739 (quick changes)
-=======
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
->>>>>>> c59be45 (keys collected get games played post)
-    @GetMapping("/gamesPlayed")
-    public List<Person> getGamesPlayed() {
-        // Get top 5 users based on cyberPoints
-        return repository.findTop5ByOrderByGamesPlayedDesc();
-<<<<<<< HEAD
->>>>>>> a9fc670 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> 07e1846 (keys collected get games played post)
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
->>>>>>> c59be45 (keys collected get games played post)
+         return repository.findByGamesPlayed();
     }
 
     @GetMapping("/keysCollected")
     public List<Person> getKeysCollected() {
-        // Get top 5 users based on cyberPoints
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d167739 (quick changes)
-=======
->>>>>>> 07e1846 (keys collected get games played post)
-=======
->>>>>>> c59be45 (keys collected get games played post)
-        return repository.findByKeysCollected();
+         return repository.findByKeysCollected();
     }
 
-
->>>>>>> 70fe2a2 (keys collected get games played post)
-<<<<<<< HEAD
-=======
->>>>>>> e88d8a6 (data base)
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
-=======
->>>>>>> 0ec9519 (keys collected get games played post)
-        return repository.findTop5ByOrderByKeysCollectedDesc();
-    }
-
-
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> a9fc670 (keys collected get games played post)
-=======
->>>>>>> 70fe2a2 (keys collected get games played post)
->>>>>>> 4e117c2 (keys collected get games played post)
-=======
->>>>>>> f523596 (data base)
-=======
->>>>>>> 70fe2a2 (keys collected get games played post)
->>>>>>> f25cfd0 (keys collected get games played post)
->>>>>>> 0ec9519 (keys collected get games played post)
-=======
-<<<<<<< HEAD
->>>>>>> f25cfd0 (keys collected get games played post)
-=======
-=======
->>>>>>> e88d8a6 (data base)
-<<<<<<< HEAD
->>>>>>> 01cc54d (data base)
-<<<<<<< HEAD
->>>>>>> f4c64c9 (data base)
-=======
-=======
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
-        return repository.findTop5ByOrderByKeysCollectedDesc();
-    }
-
-
-<<<<<<< HEAD
->>>>>>> a9fc670 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> f3a7030 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> 07e1846 (keys collected get games played post)
-=======
-=======
-=======
->>>>>>> 70fe2a2 (keys collected get games played post)
->>>>>>> 4e117c2 (keys collected get games played post)
->>>>>>> f937f0d (keys collected get games played post)
->>>>>>> c59be45 (keys collected get games played post)
     /*
     DELETE individual Person using ID :)
      */
@@ -475,10 +364,7 @@ public class PersonApiController {
     }
 
 
-
-    //add number of game plays for cyber games
-    @PostMapping("/addGamePlay")
-    @PreAuthorize("isAuthenticated()")
+    @PostMapping("addGamePlay")
     public ResponseEntity<Person> addGamePlay(@RequestParam("plays") int plays) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = repository.findByEmail(username);
@@ -486,6 +372,31 @@ public class PersonApiController {
 
         repository.save(person);  // Save the updated Person object
         return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @PostMapping("/addKey")
+    public ResponseEntity<Person> addKey(@RequestParam("numKeys") int numKeys) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        person.setKeysCollected(person.getKeysCollected() + numKeys);
+
+        repository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @PostMapping("/removeKey")
+    public ResponseEntity<Person> removeKey(@RequestParam("numKeys") int numKeys) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+
+        if (person.getKeysCollected() >= numKeys) {
+            person.setKeysCollected(person.getKeysCollected() - numKeys);
+            repository.save(person);
+
+            return new ResponseEntity<>(person, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/addPointsCSA")
