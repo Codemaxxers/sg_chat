@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -127,14 +129,12 @@ public class PersonApiController {
 
     @GetMapping("/gamesPlayed")
     public List<Person> getGamesPlayed() {
-        // Get top 5 users based on cyberPoints
-        return repository.findByGamesPlayed();
+         return repository.findByGamesPlayed();
     }
 
     @GetMapping("/keysCollected")
     public List<Person> getKeysCollected() {
-        // Get top 5 users based on cyberPoints
-        return repository.findByKeysCollected();
+         return repository.findByKeysCollected();
     }
 
     /*
@@ -298,10 +298,7 @@ public class PersonApiController {
     }
 
 
-
-    //add number of game plays for cyber games
-    @PostMapping("/addGamePlay")
-    @PreAuthorize("isAuthenticated()")
+    @PostMapping("addGamePlay")
     public ResponseEntity<Person> addGamePlay(@RequestParam("plays") int plays) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = repository.findByEmail(username);
@@ -309,6 +306,31 @@ public class PersonApiController {
 
         repository.save(person);  // Save the updated Person object
         return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @PostMapping("/addKey")
+    public ResponseEntity<Person> addKey(@RequestParam("numKeys") int numKeys) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        person.setKeysCollected(person.getKeysCollected() + numKeys);
+
+        repository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @PostMapping("/removeKey")
+    public ResponseEntity<Person> removeKey(@RequestParam("numKeys") int numKeys) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+
+        if (person.getKeysCollected() >= numKeys) {
+            person.setKeysCollected(person.getKeysCollected() - numKeys);
+            repository.save(person);
+
+            return new ResponseEntity<>(person, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PostMapping("/addPointsCSA")
