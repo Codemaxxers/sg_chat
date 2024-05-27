@@ -42,10 +42,126 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 
     List<Person> findTop5ByOrderByCyberPointsDesc();
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+=======
+>>>>>>> a9fc670 (keys collected get games played post)
+=======
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> 4e117c2 (keys collected get games played post)
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> f4c64c9 (data base)
+=======
+>>>>>>> 07e1846 (keys collected get games played post)
+=======
+>>>>>>> c59be45 (keys collected get games played post)
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> f25cfd0 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> 0ec9519 (keys collected get games played post)
+=======
+=======
+=======
+>>>>>>> a9fc670 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> f3a7030 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> 07e1846 (keys collected get games played post)
+=======
+=======
+=======
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> 4e117c2 (keys collected get games played post)
+>>>>>>> f937f0d (keys collected get games played post)
+>>>>>>> c59be45 (keys collected get games played post)
     List<Person> findTop5ByOrderByGamesPlayedDesc();
 
     List<Person> findTop5ByOrderByKeysCollectedDesc();
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 4e117c2 (keys collected get games played post)
+=======
+>>>>>>> 821fd7d (data base)
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+<<<<<<< HEAD
+=======
+>>>>>>> e88d8a6 (data base)
+=======
+>>>>>>> a9fc670 (keys collected get games played post)
+=======
+>>>>>>> 4e117c2 (keys collected get games played post)
+=======
+>>>>>>> f523596 (data base)
+=======
+=======
+>>>>>>> 07e1846 (keys collected get games played post)
+=======
+=======
+>>>>>>> 4e117c2 (keys collected get games played post)
+>>>>>>> c59be45 (keys collected get games played post)
+=======
+>>>>>>> 821fd7d (data base)
+<<<<<<< HEAD
+>>>>>>> 732d469 (data base)
+=======
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> f25cfd0 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> 0ec9519 (keys collected get games played post)
+=======
+=======
+=======
+>>>>>>> f937f0d (keys collected get games played post)
+=======
+>>>>>>> e88d8a6 (data base)
+<<<<<<< HEAD
+>>>>>>> 01cc54d (data base)
+<<<<<<< HEAD
+>>>>>>> f4c64c9 (data base)
+=======
+=======
+=======
+>>>>>>> a9fc670 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> f3a7030 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> 07e1846 (keys collected get games played post)
+=======
+=======
+=======
+>>>>>>> 4e117c2 (keys collected get games played post)
+>>>>>>> f937f0d (keys collected get games played post)
+>>>>>>> c59be45 (keys collected get games played post)
     // You can use no query or query
 
     @Query("SELECT p FROM Person p ORDER BY p.cspPoints DESC")
@@ -57,12 +173,118 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
     @Query("SELECT p FROM Person p ORDER BY p.cyberPoints DESC")
     List<Person> findTop5ByCyberPoints();
 
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> f4c64c9 (data base)
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
     @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
     List<Person> findByGamesPlayed();
 
     @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
     List<Person> findByKeysCollected();
 
+<<<<<<< HEAD
+=======
+>>>>>>> 821fd7d (data base)
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+=======
+>>>>>>> e88d8a6 (data base)
+=======
+=======
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> 4e117c2 (keys collected get games played post)
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> f25cfd0 (keys collected get games played post)
+>>>>>>> 0ec9519 (keys collected get games played post)
+    @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
+    List<Person> findByGamesPlayed();
+
+    @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
+    List<Person> findByKeysCollected();
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> a9fc670 (keys collected get games played post)
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 821fd7d (data base)
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> 4e117c2 (keys collected get games played post)
+=======
+>>>>>>> f523596 (data base)
+=======
+=======
+>>>>>>> 821fd7d (data base)
+<<<<<<< HEAD
+>>>>>>> 732d469 (data base)
+=======
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> f25cfd0 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> 0ec9519 (keys collected get games played post)
+=======
+=======
+=======
+>>>>>>> e88d8a6 (data base)
+<<<<<<< HEAD
+>>>>>>> 01cc54d (data base)
+<<<<<<< HEAD
+>>>>>>> f4c64c9 (data base)
+=======
+=======
+=======
+=======
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> 4e117c2 (keys collected get games played post)
+    @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
+    List<Person> findByGamesPlayed();
+
+    @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
+    List<Person> findByKeysCollected();
+
+<<<<<<< HEAD
+>>>>>>> a9fc670 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> f3a7030 (keys collected get games played post)
+<<<<<<< HEAD
+>>>>>>> 07e1846 (keys collected get games played post)
+=======
+=======
+=======
+<<<<<<< HEAD
+=======
+>>>>>>> 821fd7d (data base)
+=======
+>>>>>>> 70fe2a2 (keys collected get games played post)
+>>>>>>> 4e117c2 (keys collected get games played post)
+>>>>>>> f937f0d (keys collected get games played post)
+>>>>>>> c59be45 (keys collected get games played post)
 }
 
 
