@@ -49,7 +49,7 @@ public class PersonApiController {
     private PersonDetailsService personDetailsService;
 
     /*
-    GET List of People
+    GET List of People :)
      */
     @GetMapping("/")
     @PreAuthorize("isAuthenticated()")
@@ -138,7 +138,7 @@ public class PersonApiController {
     }
 
     /*
-    DELETE individual Person using ID
+    DELETE individual Person using ID :)
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Person> deletePerson(@PathVariable long id) {
