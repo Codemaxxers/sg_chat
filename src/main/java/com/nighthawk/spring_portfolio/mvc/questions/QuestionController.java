@@ -1,8 +1,11 @@
 package com.nighthawk.spring_portfolio.mvc.questions;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Random;
@@ -28,17 +31,17 @@ public class QuestionController {
     public Question getRandomQuestionByUnit(@PathVariable String unit) {
         // Fetch all questions for the given unit
         List<Question> questions = questionRepository.findAllByUnit(unit);
-        
+
         // Check if there are any questions for the given unit
         if (questions.isEmpty()) {
             // Handle the case when there are no questions for the given unit
             // For example, you can return an error message or throw an exception
             throw new RuntimeException("No questions found for unit: " + unit);
         }
-        
+
         // Generate a random index within the range of the list size
         int randomIndex = new Random().nextInt(questions.size());
-        
+
         // Return the randomly selected question
         return questions.get(randomIndex);
     }

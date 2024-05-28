@@ -25,6 +25,5 @@ public class QuestionService {
         return customQuestionRepository.findRandomQuestion(courseName);
     }
 
-
     // Other business logic methods
 }
