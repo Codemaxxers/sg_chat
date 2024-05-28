@@ -22,7 +22,7 @@ public class QuestionController {
     public List<Question> getAllQuestions() {
         return questionService.getAllQuestions();
     }
-
+ 
     //Get a random question
     @GetMapping("/randomQuestion/{unit}")
     public Question getRandomQuestionByUnit(@PathVariable String unit) {

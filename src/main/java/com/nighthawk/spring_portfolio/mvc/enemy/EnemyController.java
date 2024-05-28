@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/enemies")
 public class EnemyController {
-
+ 
     private final EnemyJPA enemyRepository;
 
     @Autowired

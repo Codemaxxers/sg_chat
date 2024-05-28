@@ -38,7 +38,7 @@ public class Enemy {
         this.level = level;
         this.type = type;
     }
-
+ 
     public static List<Enemy> createInitialData() {
         ArrayList<Enemy> enemies = new ArrayList<>();
 
