@@ -93,6 +93,24 @@ public class PersonApiController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/getWeaponInventory")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getPlayerInventory() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        List<Integer> inventory = person.getInventory();
+        List<Integer> filteredInventory = new ArrayList<>();
+
+        for (Integer item : inventory) {
+            if (item.intValue() >= 2000 && item.intValue() <= 3000) {
+                filteredInventory.add(item);
+            }
+        }
+
+        return new ResponseEntity<>(filteredInventory, HttpStatus.OK);
+    }
+
     
 
     /*
