@@ -1,9 +1,9 @@
 package com.nighthawk.spring_portfolio.mvc.questions;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
