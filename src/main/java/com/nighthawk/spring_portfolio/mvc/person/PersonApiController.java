@@ -121,78 +121,15 @@ public class PersonApiController {
         return repository.findTop5ByOrderByCsaPointsDesc();
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> e88d8a6 (data base)
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
-=======
->>>>>>> f523596 (data base)
-=======
-=======
->>>>>>> c59be45 (keys collected get games played post)
-=======
-=======
-<<<<<<< HEAD
->>>>>>> f25cfd0 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> 0ec9519 (keys collected get games played post)
-=======
-=======
->>>>>>> e88d8a6 (data base)
-<<<<<<< HEAD
->>>>>>> 01cc54d (data base)
-<<<<<<< HEAD
->>>>>>> f4c64c9 (data base)
-=======
-=======
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
->>>>>>> f937f0d (keys collected get games played post)
->>>>>>> c59be45 (keys collected get games played post)
+
     @GetMapping("/leaderboardCyber")
     public List<Person> getLeaderboardCyber() {
         // Get top 5 users based on cyberPoints
         return repository.findTop5ByOrderByCyberPointsDesc();
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 07e1846 (keys collected get games played post)
-=======
->>>>>>> c59be45 (keys collected get games played post)
-=======
->>>>>>> 732d469 (data base)
-=======
-=======
->>>>>>> 01cc54d (data base)
-<<<<<<< HEAD
->>>>>>> f4c64c9 (data base)
-=======
-=======
->>>>>>> f3a7030 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> 07e1846 (keys collected get games played post)
-=======
-=======
->>>>>>> f937f0d (keys collected get games played post)
->>>>>>> c59be45 (keys collected get games played post)
+
+
     @GetMapping("/gamesPlayed")
     public List<Person> getGamesPlayed() {
          return repository.findByGamesPlayed();
@@ -496,43 +433,7 @@ public class PersonApiController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> e88d8a6 (data base)
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
-=======
->>>>>>> f523596 (data base)
-=======
-=======
->>>>>>> c59be45 (keys collected get games played post)
-=======
-=======
-<<<<<<< HEAD
->>>>>>> f25cfd0 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> 0ec9519 (keys collected get games played post)
-=======
-=======
->>>>>>> e88d8a6 (data base)
-<<<<<<< HEAD
->>>>>>> 01cc54d (data base)
-<<<<<<< HEAD
->>>>>>> f4c64c9 (data base)
-=======
-=======
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
->>>>>>> f937f0d (keys collected get games played post)
->>>>>>> c59be45 (keys collected get games played post)
+
     @PostMapping("/addPointsCyber")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Person> addPointsCyber(@RequestParam("points") int points) {
@@ -559,67 +460,7 @@ public class PersonApiController {
         person.setAccountLevel(newLevel);
         // END OF ACCOUNT LEVEL CALCULATION
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
 
-
->>>>>>> e88d8a6 (data base)
-=======
->>>>>>> a9fc670 (keys collected get games played post)
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
-=======
-
-
->>>>>>> f523596 (data base)
-=======
-=======
->>>>>>> f4c64c9 (data base)
-=======
->>>>>>> 07e1846 (keys collected get games played post)
-=======
->>>>>>> c59be45 (keys collected get games played post)
-
-
-=======
->>>>>>> f25cfd0 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> 0ec9519 (keys collected get games played post)
-=======
-=======
-=======
->>>>>>> f3a7030 (keys collected get games played post)
-=======
->>>>>>> f937f0d (keys collected get games played post)
-=======
-
-
->>>>>>> e88d8a6 (data base)
-<<<<<<< HEAD
->>>>>>> 01cc54d (data base)
-<<<<<<< HEAD
->>>>>>> f4c64c9 (data base)
-=======
-=======
-=======
->>>>>>> a9fc670 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> f3a7030 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> 07e1846 (keys collected get games played post)
-=======
-=======
-=======
->>>>>>> 4e117c2 (keys collected get games played post)
->>>>>>> f937f0d (keys collected get games played post)
->>>>>>> c59be45 (keys collected get games played post)
         // START OF LEVEL STATS CALCULATION
         int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};
         int accountLevelMatchingStats = newLevel - 1;
@@ -639,50 +480,6 @@ public class PersonApiController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
->>>>>>> 70fe2a2 (keys collected get games played post)
-=======
->>>>>>> e88d8a6 (data base)
-=======
->>>>>>> 70fe2a2 (keys collected get games played post)
->>>>>>> 4e117c2 (keys collected get games played post)
-=======
->>>>>>> f523596 (data base)
-=======
-=======
->>>>>>> f4c64c9 (data base)
-=======
->>>>>>> c59be45 (keys collected get games played post)
-=======
->>>>>>> 732d469 (data base)
-=======
->>>>>>> 70fe2a2 (keys collected get games played post)
->>>>>>> f25cfd0 (keys collected get games played post)
-<<<<<<< HEAD
->>>>>>> 0ec9519 (keys collected get games played post)
-=======
-=======
->>>>>>> 70fe2a2 (keys collected get games played post)
-=======
->>>>>>> e88d8a6 (data base)
->>>>>>> 01cc54d (data base)
-<<<<<<< HEAD
->>>>>>> f4c64c9 (data base)
-=======
-=======
->>>>>>> 70fe2a2 (keys collected get games played post)
-=======
->>>>>>> e88d8a6 (data base)
-=======
->>>>>>> 70fe2a2 (keys collected get games played post)
->>>>>>> 4e117c2 (keys collected get games played post)
->>>>>>> f937f0d (keys collected get games played post)
->>>>>>> c59be45 (keys collected get games played post)
 
     @PostMapping("/changeProfilePic")
     @PreAuthorize("isAuthenticated()")
