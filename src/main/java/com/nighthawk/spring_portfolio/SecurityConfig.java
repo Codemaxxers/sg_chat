@@ -54,18 +54,7 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 6ec07a4 ( Changes to be committed:)
-=======
->>>>>>> 597f3ff ( Changes to be committed:)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	
     // Provide security configuration
 		@Bean
 		public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
