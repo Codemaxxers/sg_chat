@@ -29,7 +29,7 @@ public class EnemyController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
+ 
     @GetMapping
     public ResponseEntity<List<Enemy>> getAllEnemies() {
         List<Enemy> enemies = enemyRepository.findAll();
