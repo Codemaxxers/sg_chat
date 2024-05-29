@@ -12,4 +12,4 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
  
     @Query("SELECT q FROM Question q WHERE q.unit = :unit")
     List<Question> findAllByUnit(@Param("unit") String unit);
-}
+}  

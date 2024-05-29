@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Random;
-
-
+ 
+ 
 @RestController
 @RequestMapping("/api/questions")
 public class QuestionController {
