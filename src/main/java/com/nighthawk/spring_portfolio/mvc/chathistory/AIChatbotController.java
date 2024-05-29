@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.function.EntityResponse;
 import com.nighthawk.spring_portfolio.mvc.person.PersonApiController;
 import com.nighthawk.spring_portfolio.mvc.person.Person;
 
@@ -50,6 +51,7 @@ public class AIChatbotController {
 
 	// create chat GTP thread id
 	private static String threadId  =  "thread_" + dotenv.get("ai_thread_id");
+
 
 	// basic hello greeting
 	@GetMapping("")
@@ -79,7 +81,9 @@ public class AIChatbotController {
 	
 	@DeleteMapping("/chat/history/clear")
 	@PreAuthorize("isAuthenticated()")
+
 	public String clearChatHistory() {
+
 		ResponseEntity<Person> personData = personApiController.getAuthenticatedPersonData();
 		System.out.println("Logged In Person: " + personData.getBody().getId());
 		List<Chat> 	chats = chatJpaRepository.deleteByPersonId(personData.getBody().getId());
@@ -318,3 +322,4 @@ class JSONResponseHandler implements HttpClientResponseHandler<JSONObject> {
 		}
 	}
 }
+
