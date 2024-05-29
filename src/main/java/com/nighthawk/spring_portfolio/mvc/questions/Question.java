@@ -77,7 +77,7 @@ public class Question {
         questions[10] = new Question("What is the role of a router in a network?", "To connect devices within the same network", "To connect multiple networks together", "To protect against viruses", "To host websites", "It links different networks together", 2, 2, "csp", 35);
         questions[11] = new Question("Which of the following is an example of a DNS record type?", "FTP", "MX", "HTTP", "SSL", "It's used for email routing", 2, 2, "csp", 30);
         questions[12] = new Question("What does the acronym 'HTTP' stand for?", "Hypertext Transfer Protocol", "Hyperlink Text Transfer Protocol", "High Transfer Technology Protocol", "Home Text Terminal Protocol", "It's the foundation of web data transfer", 1, 1, "csp", 40);
-        questions[13] = new Question("What is the purpose of an IP address?", "To identify a specific website", "To identify a specific device on a network", "To encrypt internet traffic", "To manage email communication", "It uniquely identifies devices on a networ", 2, 1, "csp", 45);
+        questions[13] = new Question("What is the purpose of an IP address?", "To identify a specific website", "To identify a specific device on a network", "To encrypt internet traffic", "To manage email communication", "It uniquely identifies devices on a network", 2, 1, "csp", 45);
         questions[14] = new Question("Which of the following is NOT a characteristic of a good algorithm?", "Efficiency", "Completeness", "Uniqueness", "Correctness", "Good algorithms should not require uniqueness", 3, 2, "csp", 35);
     
         // CSA Questions
