@@ -48,9 +48,7 @@ public class AIChatbotController {
 	
 	static Dotenv dotenv = Dotenv.load();
 
-	// keeping key here hidden from the common env until find a way to encrypt keys
-	private static final String key = "";
-	//dotenv.get("key");
+	private static final String key = dotenv.get("key");
 
 	// create chat GPT assistant id
 	private static String assistantId = "asst_8OuJGh5SmCLAhKpRhdYuYgmQ";
