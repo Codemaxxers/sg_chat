@@ -10,3 +10,4 @@ public interface EnemyJPA extends JpaRepository<Enemy, Long> {
 
     List<Enemy> findByType(String type);
 }
+ 

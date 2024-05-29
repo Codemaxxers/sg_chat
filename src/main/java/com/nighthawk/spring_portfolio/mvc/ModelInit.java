@@ -67,7 +67,7 @@ public class ModelInit {
             Term[] termArray = Term.init();
             if (termRepo.findAll().isEmpty()) {
                 for (Term term : termArray) {
-                    termRepo.save(term);
+                    termRepo.save(term); 
                 }
                 return;
             }

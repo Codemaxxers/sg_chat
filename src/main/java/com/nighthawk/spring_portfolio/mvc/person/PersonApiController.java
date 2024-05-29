@@ -92,7 +92,7 @@ public class PersonApiController {
         // Add more properties as needed
 
         return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+    } 
 
     @GetMapping("/getWeaponInventory")
     @PreAuthorize("isAuthenticated()")
