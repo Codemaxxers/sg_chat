@@ -42,9 +42,12 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
 
     List<Person> findTop5ByOrderByCyberPointsDesc();
 
+
     List<Person> findTop5ByOrderByGamesPlayedDesc();
 
     List<Person> findTop5ByOrderByKeysCollectedDesc();
+
+
 
     // You can use no query or query
 
@@ -57,11 +60,26 @@ public interface PersonJpaRepository extends JpaRepository<Person, Long> {
     @Query("SELECT p FROM Person p ORDER BY p.cyberPoints DESC")
     List<Person> findTop5ByCyberPoints();
 
-    @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
-    List<Person> findByGamesPlayed();
 
-    @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
-    List<Person> findByKeysCollected();
+    //!!!!!!!commented for now unless you fix this
+    // @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
+    // List<Person> findByGamesPlayed();
+
+     @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
+     List<Person> findByKeysCollected();
+
+     @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
+     List<Person> findByGamesPlayed();
+
+    // @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
+    // List<Person> findByKeysCollected();
+
+
+    // @Query("SELECT p FROM Person p ORDER BY p.gamesPlayed DESC")
+    // List<Person> findByGamesPlayed();
+
+    // @Query("SELECT p FROM Person p ORDER BY p.keysCollected DESC")
+    // List<Person> findByKeysCollected();
 
 }
 
