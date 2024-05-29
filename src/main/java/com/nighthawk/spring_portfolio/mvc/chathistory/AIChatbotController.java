@@ -21,6 +21,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,6 +31,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.function.EntityResponse;
+
+import com.nighthawk.spring_portfolio.mvc.person.PersonApiController;
+import com.nighthawk.spring_portfolio.mvc.person.Person;
 
 // AI Chat Bot Controller based on Chat GPT 3.5 API
 @RestController
@@ -36,6 +42,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AIChatbotController {
 	@Autowired
 	ChatJpaRepository chatJpaRepository;
+
+	@Autowired
+	PersonApiController personApiController;
 	
 	static Dotenv dotenv = Dotenv.load();
 
@@ -45,7 +54,7 @@ public class AIChatbotController {
 	private static String assistantId = "asst_8OuJGh5SmCLAhKpRhdYuYgmQ";
 
 	// create chat GTP thread id
-	private static String threadId  = "thread_15jXCg2zNHIQgmgwYBItZGYq";
+	private static String threadId  = "thread_ZwGYo138ysVe3rgOFXO4XiNz";
 
 	// create the assistant and thread once the controller loads
 	// need to test if this needs to be refreshed after a while
@@ -99,11 +108,15 @@ public class AIChatbotController {
 
 	// chat request mapping
 	@GetMapping("/chat")
+	@PreAuthorize("isAuthenticated()")
 	public String chat(@RequestParam String message) {
+		ResponseEntity<Person> personData = personApiController.getAuthenticatedPersonData();
+		System.out.println("Logged In Person: " + personData.getBody().getId());
+
 		try {
 			// user sends a message that is sent to chat gpt and a response is returned
 			String response = getResponseFromAI(message);
-			Chat chat = new Chat(message, response, new Date(System.currentTimeMillis()), 1l);
+			Chat chat = new Chat(message, response, new Date(System.currentTimeMillis()), personData.getBody().getId());
 			Chat chatUpdated = chatJpaRepository.save(chat);
 			System.out.println("Chat saved in db: " + chatUpdated.getId());
 			return response;
@@ -114,8 +127,11 @@ public class AIChatbotController {
 	}
 	
 	@DeleteMapping("/chat/history/clear")
+	@PreAuthorize("isAuthenticated()")
 	public String clearCharHistory() {
-		List<Chat> 	chats = chatJpaRepository.deleteByPersonId(1l);
+		ResponseEntity<Person> personData = personApiController.getAuthenticatedPersonData();
+		System.out.println("Logged In Person: " + personData.getBody().getId());
+		List<Chat> 	chats = chatJpaRepository.deleteByPersonId(personData.getBody().getId());
 		JSONObject obj = new JSONObject();
 		JSONArray list = new JSONArray();
        
@@ -129,8 +145,11 @@ public class AIChatbotController {
 	}
 	
 	@GetMapping("/chat/history")
+	@PreAuthorize("isAuthenticated()")
 	public String getAllChatsForUser() {
-		List<Chat> 	chats = chatJpaRepository.findByPersonId(1l);
+		ResponseEntity<Person> personData = personApiController.getAuthenticatedPersonData();
+		System.out.println("Logged In Person: " + personData.getBody().getId());
+		List<Chat> 	chats = chatJpaRepository.findByPersonId(personData.getBody().getId());
 		JSONObject obj = new JSONObject();
 		JSONArray list = new JSONArray();
        
