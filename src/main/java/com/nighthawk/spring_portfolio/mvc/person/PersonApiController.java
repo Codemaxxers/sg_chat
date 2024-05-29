@@ -93,6 +93,24 @@ public class PersonApiController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping("/getWeaponInventory")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Object> getPlayerInventory() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Person person = repository.findByEmail(username);
+        List<Integer> inventory = person.getInventory();
+        List<Integer> filteredInventory = new ArrayList<>();
+
+        for (Integer item : inventory) {
+            if (item.intValue() >= 2000 && item.intValue() <= 3000) {
+                filteredInventory.add(item);
+            }
+        }
+
+        return new ResponseEntity<>(filteredInventory, HttpStatus.OK);
+    }
+
     
 
     /*
@@ -121,11 +139,14 @@ public class PersonApiController {
         return repository.findTop5ByOrderByCsaPointsDesc();
     }
 
+
     @GetMapping("/leaderboardCyber")
     public List<Person> getLeaderboardCyber() {
         // Get top 5 users based on cyberPoints
         return repository.findTop5ByOrderByCyberPointsDesc();
     }
+
+
 
     @GetMapping("/gamesPlayed")
     public List<Person> getGamesPlayed() {
@@ -440,6 +461,7 @@ public class PersonApiController {
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
 
+
     @PostMapping("/addPointsCyber")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Person> addPointsCyber(@RequestParam("points") int points) {
@@ -465,6 +487,7 @@ public class PersonApiController {
         }
         person.setAccountLevel(newLevel);
         // END OF ACCOUNT LEVEL CALCULATION
+
 
         // START OF LEVEL STATS CALCULATION
         int[] baseStats = {100,107,114,121,128,135,141,148,155,162,169,176,183,190,197,204,211,218,225,232,239,246,253,260,267,274,281,288,295,300};

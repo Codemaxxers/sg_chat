@@ -1,4 +1,8 @@
 package com.nighthawk.spring_portfolio.mvc.questions;
+<<<<<<< HEAD
+=======
+ 
+>>>>>>> 51e3577eef585a91d7950e8719bf967a32e1228c
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
