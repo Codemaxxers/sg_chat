@@ -182,7 +182,7 @@ public class AIChatbotController {
 		// Create the message. Use the user's query
 		String createMessageUrl = "https://api.openai.com/v1/threads/" + threadId + "/messages";
 		Header contentType = new BasicHeader("Content-Type", "application/json");
-		Header auth = new BasicHeader("Authorization", "Bearer " + dotenv.get("ai_key"));
+		Header auth = new BasicHeader("Authorization", "Bearer sk-proj-" + dotenv.get("ai_key"));
 		Header org = new BasicHeader("OpenAI-Organization", "org-sv0fuwJ8PSa0kMI5psf5d0Q8");
 		Header openAiBeta = new BasicHeader("OpenAI-Beta", "assistants=v1");
 
