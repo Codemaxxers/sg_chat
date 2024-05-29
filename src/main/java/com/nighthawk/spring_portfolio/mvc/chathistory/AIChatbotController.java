@@ -21,14 +21,17 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.web.bind.annotation.RestController;
+import com.nighthawk.spring_portfolio.mvc.person.PersonApiController;
+import com.nighthawk.spring_portfolio.mvc.person.Person;
 
 // AI Chat Bot Controller based on Chat GPT 3.5 API
 @RestController
@@ -36,60 +39,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class AIChatbotController {
 	@Autowired
 	ChatJpaRepository chatJpaRepository;
+
+	@Autowired
+	PersonApiController personApiController;
 	
 	static Dotenv dotenv = Dotenv.load();
 
-	private static final String key = dotenv.get("key");
-
 	// create chat GPT assistant id
-	private static String assistantId = "asst_8OuJGh5SmCLAhKpRhdYuYgmQ";
+	private static String assistantId = "asst_" + dotenv.get("ai_asst_id");
 
 	// create chat GTP thread id
-	private static String threadId  = "thread_15jXCg2zNHIQgmgwYBItZGYq";
-
-	// create the assistant and thread once the controller loads
-	// need to test if this needs to be refreshed after a while
-	/*static {
-		// create assistant URL
-		String createAssistantUrl = "https://api.openai.com/v1/assistants";
-
-		// create thread URL
-		String createThreadUrl = "https://api.openai.com/v1/threads";
-
-		// chat gpt required headers
-		Header contentType = new BasicHeader("Content-Type", "application/json");
-		Header auth = new BasicHeader("Authorization", "Bearer " + key);
-		Header openAiBeta = new BasicHeader("OpenAI-Beta", "assistants=v1");
-		Header org = new BasicHeader("OpenAI-Organization", "org-sv0fuwJ8PSa0kMI5psf5d0Q8");
-
-		// hard coded JSON string for assistance request payload
-		// getting errors while JSON parsing, hence hardcoding it for now
-		String aBodyStr = "{\"instructions\": \"You are a personal math tutor. Write and run code to answer math questions.\",\"name\": \"Math Tutor\",\"tools\": [{\"type\": \"code_interpreter\"}],\"model\": \"gpt-3.5-turbo\"}";
-
-		JSONObject aJson;
-
-		// make a post request and get assistant id
-		try {
-			aJson = sendHttpPost(createAssistantUrl, aBodyStr, contentType, auth, openAiBeta, org);
-			assistantId = (String) aJson.get("id");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		JSONObject tJson;
-
-		// make a post request and get thread id
-		try {
-			// Chat GPT doesn't require a body / payload for thread request
-			tJson = sendHttpPost(createThreadUrl, "", contentType, auth, openAiBeta, org);
-			threadId = (String) tJson.get("id");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}*/
+	private static String threadId  =  "thread_" + dotenv.get("ai_thread_id");
 
 	// basic hello greeting
 	@GetMapping("")
@@ -99,11 +59,15 @@ public class AIChatbotController {
 
 	// chat request mapping
 	@GetMapping("/chat")
+	@PreAuthorize("isAuthenticated()")
 	public String chat(@RequestParam String message) {
+		ResponseEntity<Person> personData = personApiController.getAuthenticatedPersonData();
+		System.out.println("Logged In Person: " + personData.getBody().getId());
+
 		try {
 			// user sends a message that is sent to chat gpt and a response is returned
 			String response = getResponseFromAI(message);
-			Chat chat = new Chat(message, response, new Date(System.currentTimeMillis()), 1l);
+			Chat chat = new Chat(message, response, new Date(System.currentTimeMillis()), personData.getBody().getId());
 			Chat chatUpdated = chatJpaRepository.save(chat);
 			System.out.println("Chat saved in db: " + chatUpdated.getId());
 			return response;
@@ -114,8 +78,11 @@ public class AIChatbotController {
 	}
 	
 	@DeleteMapping("/chat/history/clear")
-	public String clearCharHistory() {
-		List<Chat> 	chats = chatJpaRepository.deleteByPersonId(1l);
+	@PreAuthorize("isAuthenticated()")
+	public String clearChatHistory() {
+		ResponseEntity<Person> personData = personApiController.getAuthenticatedPersonData();
+		System.out.println("Logged In Person: " + personData.getBody().getId());
+		List<Chat> 	chats = chatJpaRepository.deleteByPersonId(personData.getBody().getId());
 		JSONObject obj = new JSONObject();
 		JSONArray list = new JSONArray();
        
@@ -127,10 +94,22 @@ public class AIChatbotController {
 		obj.put("chats", list);
 		return obj.toJSONString();
 	}
+
+	@DeleteMapping("/chat/history/delete/{id}")
+	@PreAuthorize("isAuthenticated()")
+	public String deleteChat(@PathVariable Long id) {
+		ResponseEntity<Person> personData = personApiController.getAuthenticatedPersonData();
+		System.out.println("Logged In Person: " + personData.getBody().getId());
+		chatJpaRepository.deleteById(id);
+		return getAllChatsForUser();
+	}
 	
 	@GetMapping("/chat/history")
+	@PreAuthorize("isAuthenticated()")
 	public String getAllChatsForUser() {
-		List<Chat> 	chats = chatJpaRepository.findByPersonId(1l);
+		ResponseEntity<Person> personData = personApiController.getAuthenticatedPersonData();
+		System.out.println("Logged In Person: " + personData.getBody().getId());
+		List<Chat> 	chats = chatJpaRepository.findByPersonId(personData.getBody().getId());
 		JSONObject obj = new JSONObject();
 		JSONArray list = new JSONArray();
        
@@ -197,14 +176,13 @@ public class AIChatbotController {
 	 * and returned to the user
 	 */
 	public String getResponseFromAI(String userQuery) throws Exception {
-
 		System.out.println("Assistant Id: " + assistantId);
 		System.out.println("Thread Id: " + threadId);
 
 		// Create the message. Use the user's query
 		String createMessageUrl = "https://api.openai.com/v1/threads/" + threadId + "/messages";
 		Header contentType = new BasicHeader("Content-Type", "application/json");
-		Header auth = new BasicHeader("Authorization", "Bearer " + key);
+		Header auth = new BasicHeader("Authorization", "Bearer " + dotenv.get("ai_key"));
 		Header org = new BasicHeader("OpenAI-Organization", "org-sv0fuwJ8PSa0kMI5psf5d0Q8");
 		Header openAiBeta = new BasicHeader("OpenAI-Beta", "assistants=v1");
 
