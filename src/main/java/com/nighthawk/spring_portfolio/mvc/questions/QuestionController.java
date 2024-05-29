@@ -47,6 +47,21 @@ public class QuestionController {
         return questions.get(randomIndex);
     }
 
+    @GetMapping("/QuestionById/{id}")
+    public Question getQuestionById(@PathVariable Integer id) {
+        // Fetch all questions for the given unit
+        List<Question> questions = questionRepository.findAllById(id);
+
+        // Check if there are any questions for the given unit
+        if (questions.isEmpty()) {
+            // Handle the case when there are no questions for the given unit
+            // For example, you can return an error message or throw an exception
+            throw new RuntimeException("No question found for id: " + id);
+        }
+        
+        return questions.get(id);
+    }
+
     //Add Question
     @PostMapping("/makeQuestion")
     @PreAuthorize("isAuthenticated()")
