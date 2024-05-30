@@ -1,5 +1,5 @@
 fetchUserData();
-let chatHistoryMode = false;
+let chatHistoryMode = false; 
 
 // Define and select essential elements from the DOM for interaction
 const elements = {

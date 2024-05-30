@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 public class Chat {
-	 // automatic unique identifier for Person recordsz
+	 // automatic unique identifier for Person records
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

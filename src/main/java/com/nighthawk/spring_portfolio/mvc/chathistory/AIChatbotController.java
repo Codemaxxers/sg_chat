@@ -58,7 +58,7 @@ public class AIChatbotController {
 		return "Hello From Chatbot AI.";
 	}
 
-	// chat request mapping
+	// chat request mapping  
 	@GetMapping("/chat")
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<?> chat(@RequestParam String message) {
