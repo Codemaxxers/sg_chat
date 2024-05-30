@@ -149,11 +149,13 @@ public class PersonApiController {
 
 
     @GetMapping("/gamesPlayed")
+    @PreAuthorize("isAuthenticated()")
     public List<Person> getGamesPlayed() {
          return repository.findByGamesPlayed();
     }
 
     @GetMapping("/keysCollected")
+    @PreAuthorize("isAuthenticated()")
     public List<Person> getKeysCollected() {
          return repository.findByKeysCollected();
     }
@@ -320,6 +322,7 @@ public class PersonApiController {
 
 
     @PostMapping("addGamePlay")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Person> addGamePlay(@RequestParam("plays") int plays) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = repository.findByEmail(username);
@@ -330,6 +333,7 @@ public class PersonApiController {
     }
 
     @PostMapping("/resetGamePlay")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<Person> resetGamePlay(@RequestParam("plays") int plays) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         Person person = repository.findByEmail(username);
