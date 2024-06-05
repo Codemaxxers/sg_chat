@@ -31,7 +31,7 @@ public class Question {
     @Column(name = "Answer 4", nullable = false)
     private String answer4;
 
-    @Column(name = "Hint", nullable = false)
+    @Column(name = "Hint", nullable = true)
     private String hint;
 
     @Column(name = "Correct Answer", nullable = false)
